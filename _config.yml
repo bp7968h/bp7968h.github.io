@@ -4,4 +4,6 @@ description: "My personal notebook for coding, learning, and technical explorati
 show_downloads: false
 google_analytics: 9847171776
 url: "https://bp7968h.github.io"
+baseurl: ""
+permalink: /:categories/:title.html
 github_username: "bp7968h"
