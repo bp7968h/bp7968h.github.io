@@ -1,11 +1,19 @@
 ---
 layout: default
 ---
+<script src="/assets/script.js"></script>
+
+<div class="back-link">
+  <a href="{{ '/' | relative_url }}">&lt;= Back</a>
+</div>
 
 <article class="blogpost">
+  <h2>{{page.title}}</h2>
   <small>{{ page.date | date: "%-d %B %Y" }}</small>
-  <time datetime="{{ page.date }}" class="by-line"
-    >{{ page.date | date_to_string }}</time
-  >
   {{ content }}
 </article>
+
+
+<div class="to-top" id="toTop">
+  <a href="#">&uarr; To Top</a>
+</div>

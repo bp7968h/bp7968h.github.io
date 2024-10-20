@@ -15,6 +15,10 @@ $container-max-width: 1000px;
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   height: 100%;
   display: flex;
@@ -57,8 +61,12 @@ section {
   margin: 0 0 20px 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
   margin: 0 0 20px;
+}
+
+h2, h3, h4, h5, h6 {
+  margin: 0 0 2px;
 }
 
 li {
@@ -165,7 +173,7 @@ dt {
 }
 
 ul li {
-  list-style-image:url('../images/bullet.png');
+  list-style-image:url('../assets/images/bullet.png');
 }
 
 blockquote {
@@ -251,7 +259,7 @@ hr {
 
 .btn-github .icon {
   opacity: 0.6;
-  background: url("../images/blacktocat.png") 0 0 no-repeat;
+  background: url("../assets/images/blacktocat.png") 0 0 no-repeat;
 }
 
 /* Links
@@ -280,4 +288,75 @@ a {
 
 #a-title {
   text-decoration: none;
+}
+
+
+.post-info {
+  display: flex;
+  align-items: center;
+}
+
+.post-date {
+  display: inline-block;
+  background-color: #333;
+  color: #b5e853;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.categories {
+  margin-left: 5px;
+}
+
+.category-chip {
+  display: inline-block;
+  background-color: #333;
+  color: #00ff00;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.back-link {
+  margin: 0 0 15px 0;
+}
+
+.back-link a {
+  color: #00ff00; /* Bright green color matching your theme */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+}
+
+.back-link a:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+
+#toTop {
+  display: none;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.to-top a {
+  color: #00ff00;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #00ff00;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.to-top a:hover {
+  background-color: #00ff00;
+  color: #000;
 }

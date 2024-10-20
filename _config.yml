@@ -15,14 +15,6 @@ permalink: /:title
 paginate: 3
 paginate_path: /page/:num/
 
-defaults:
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
-
 sass:
   sass_dir: _scss
 
