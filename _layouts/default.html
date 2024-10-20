@@ -4,7 +4,11 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ '/css/main.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
     {% seo %}
   </head>
 
@@ -22,30 +26,7 @@
       <section id="main_content">
         {{ content }}
       </section>
-    </div>
-
-    {% if paginator.total_pages > 1 %}
-  <div class="pagination">
-    {% if paginator.previous_page == 1 %}
-    <a href="{{ '/' | prepend: site.baseurl | replace: '//', '/' }}" class="page-item">&laquo;</a>
-    {% elsif paginator.previous_page%}
-    <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" class="page-item">&laquo;</a>
-    {% else %}
-    <span class="page-item">&laquo;</span>
-    {% endif %} {% for page in (1..paginator.total_pages) %} {% if page == paginator.page %}
-    <span class="page-item">{{ page }}</span>
-    {% elsif page == 1 %}
-    <a href="{{ '/' | prepend: site.baseurl | replace: '//', '/' }}" class="page-item">{{ page }}</a>
-    {% else %}
-    <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}" class="page-item">{{ page }}</a>
-    {% endif %} {% endfor %} {% if paginator.next_page %}
-    <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}" class="page-item">&raquo;</a>
-    {% else %}
-    <span class="page-item">&raquo;</span>
-    {% endif %}
-  </div>
-  {% endif %}
-  
+    </div>  
     {% include footer.html %}
   </body>
 </html>
