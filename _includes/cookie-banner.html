@@ -1,14 +1,16 @@
 <script>
-    const cookieBanner = document.getElementById('cookie-banner');
-    const acceptButton = document.getElementById('accept-cookies');
+    document.addEventListener("DOMContentLoaded", function () {
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptButton = document.getElementById('accept-cookies');
 
-    function hideBanner() {
-        cookieBanner.style.display = 'none';
-        // Store consent preference
-        localStorage.setItem('cookieConsent', 'true');
-    }
+        function hideBanner() {
+            cookieBanner.style.display = 'none';
+            // Store consent preference
+            localStorage.setItem('cookieConsent', 'true');
+        }
 
-    acceptButton.addEventListener('click', hideBanner);
+        acceptButton.addEventListener('click', hideBanner);
+    });
 
     // Show the banner on page load
     window.onload = () => {
