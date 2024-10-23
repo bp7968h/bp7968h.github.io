@@ -7,6 +7,12 @@
             cookieBanner.style.display = 'none';
             // Store consent preference
             localStorage.setItem('cookieConsent', 'true');
+            gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'granted'
+            });
         }
 
         acceptButton.addEventListener('click', hideBanner);
@@ -14,8 +20,15 @@
 
     // Show the banner on page load
     window.onload = () => {
-        if (!localStorage.getItem('cookieConsent')) {
-        cookieBanner.style.display = 'block';
+        if (localStorage.getItem('cookieConsent')) {
+            gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'granted'
+            });
+      } else {
+            cookieBanner.style.display = 'block';
       }
     };
 </script>
