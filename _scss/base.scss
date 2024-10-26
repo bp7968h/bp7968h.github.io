@@ -391,8 +391,14 @@ a {
   background: transparent;
 }
 
+header button {
+  background: transparent;
+  margin: 5px;
+}
+
 .to-top a,
-#cookie-banner button {
+#cookie-banner button,
+header button {
   color: #00ff00;
   text-decoration: none;
   font-weight: bold;
@@ -406,7 +412,15 @@ a {
 }
 
 .to-top a:hover,
-#cookie-banner button:hover {
+#cookie-banner button:hover,
+header button:hover {
   background-color: #00ff00;
   color: #000;
+}
+
+.cat-div,
+.clear-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
