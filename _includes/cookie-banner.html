@@ -3,39 +3,43 @@
         const cookieBanner = document.getElementById('cookie-banner');
         const acceptButton = document.getElementById('accept-cookies');
 
-        function hideBanner() {
-            cookieBanner.style.display = 'none';
-            // Store consent preference
-            localStorage.setItem('cookieConsent', 'true');
-            gtag('consent', 'update', {
-                'ad_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'analytics_storage': 'granted'
-            });
-        }
-
-        acceptButton.addEventListener('click', hideBanner);
-    });
-
-    // Show the banner on page load
-    window.onload = () => {
-        if (localStorage.getItem('cookieConsent')) {
-            gtag('consent', 'update', {
-                'ad_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'analytics_storage': 'granted'
-            });
-      } else {
+        if (localStorage.getItem('cookie_consent') === 'true') {
+            if (typeof gtag === 'function') {
+                gtag('consent', 'update', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'granted'
+                });
+            }
+        } else {
             cookieBanner.style.display = 'block';
-      }
-    };
+
+            function hideBanner() {
+                cookieBanner.classList.add('hide');
+                setTimeout(() => {
+                    cookieBanner.style.display = 'none';
+                }, 400);
+                // Store consent preference
+                localStorage.setItem('cookie_consent', 'true');
+                // Update Google Analytics consent
+                if (typeof gtag === 'function') {
+                    gtag('consent', 'update', {
+                        'ad_storage': 'denied',
+                        'ad_user_data': 'denied',
+                        'ad_personalization': 'denied',
+                        'analytics_storage': 'granted'
+                    });
+                }
+            }
+            acceptButton.addEventListener('click', hideBanner);
+        }
+    });
 </script>
 
 <div id="cookie-banner">
-    <p>To provide a personalized and efficient visit, we collect anonymous data about your interactions, such as <b>page views</b>, <b>scrolling behavior</b>, and <b>outbound clicks</b>. This information helps us improve our website's layout, content, and overall usability.</p>
+    <p>To provide a personalized and efficient visit, this website collects anonymous data about your interactions, such as <b>page views</b>, <b>scrolling behavior</b>, and <b>outbound clicks</b>. This information helps improve the website's layout, content, and overall usability.</p>
     <br>
-    <p><b><i>Rest assured, we do not track any personal information. It's safe to accept cookies and continue exploring our site.</i></b></p>
+    <p><b><i>Rest assured, we do not track any personal information. It's safe to accept cookies and continue exploring the site.</i></b></p>
     <button id="accept-cookies" type="button">Accept</button>
 </div>

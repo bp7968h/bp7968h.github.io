@@ -6,3 +6,9 @@ categories: rust binary-tree data-structures
 ---
 
 Coming Soon
+
+```rust
+fn main() {
+  println!("Hello World!");
+}
+```
