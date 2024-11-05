@@ -1,1 +1,4 @@
-docker run --rm -v $(pwd):/srv/jekyll -p 4000:4000 -it jekyll/jekyll:4 jekyll serve --force_polling
+#!/bin/bash
+
+# Run tailwindcss in watch mode and Zola serve in parallel
+tailwindcss -i ./static/app.css -o ./static/main.css && zola serve
