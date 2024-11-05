@@ -1,0 +1,38 @@
+# On every push this script is executed
+on: push
+name: Build and deploy GH Pages
+jobs:
+  tailwind:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      
+      # Download Tailwind CSS standalone binary
+      - name: Download Tailwind CSS Binary
+        run: |
+          curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+          chmod +x tailwindcss-linux-x64
+          
+      # Run Tailwind CSS in release mode to generate minified CSS
+      - name: Generate Minified CSS with Tailwind
+        run: |
+          ./tailwindcss-linux-x64 -i ./static/app.css -o ./static/main.css --minify
+        env:
+          # Tailwind input and output paths need to be set accordingly to your project structure.
+          INPUT_FILE: static/app.css # Change as per your file structure
+          OUTPUT_FILE: static/main.css # Change as per your file structure
+  build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: tailwind  # Ensures Tailwind CSS job completes first
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build_and_deploy
+        uses: shalzz/zola-deploy-action@v0.17.2
+        env:
+          # Target branch
+          PAGES_BRANCH: gh-pages
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
