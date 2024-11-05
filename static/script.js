@@ -4,10 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const isDarkMode = document.documentElement.classList.contains("dark");
     const particleColor = isDarkMode ? "#ffffff" : "#000000"; // White for dark, black for light
 
+    const particlesElement = document.getElementById("particles-js");
+    if (!particlesElement) {
+      return;
+    }
+
+    /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
     particlesJS("particles-js", {
       particles: {
         number: {
-          value: 50,
+          value: 30,
           density: {
             enable: true,
             value_area: 800,
@@ -17,13 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
           value: particleColor,
         },
         shape: {
-          type: "circle",
+          type: "polygon",
           stroke: {
             width: 0,
-            color: "#000000",
+            color: particleColor,
           },
           polygon: {
             nb_sides: 5,
+          },
+          image: {
+            src: "img/github.svg",
+            width: 100,
+            height: 100,
           },
         },
         opacity: {
@@ -41,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
           random: true,
           anim: {
             enable: false,
-            speed: 40,
+            speed: 19.18081918081918,
             size_min: 0.1,
             sync: false,
           },
@@ -55,9 +66,9 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         move: {
           enable: true,
-          speed: 6,
+          speed: 4,
           direction: "none",
-          random: false,
+          random: true,
           straight: false,
           out_mode: "out",
           bounce: false,
@@ -67,13 +78,14 @@ document.addEventListener("DOMContentLoaded", function () {
             rotateY: 1200,
           },
         },
+        nb: 80,
       },
       interactivity: {
         detect_on: "canvas",
         events: {
           onhover: {
-            enable: true,
-            mode: "repulse",
+            enable: false,
+            mode: "grab",
           },
           onclick: {
             enable: true,
@@ -111,9 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Initial particle setup
-  initParticles();
-
   // Function to refresh particles based on the current theme
   function refreshParticles() {
     const isDarkMode = document.documentElement.classList.contains("dark");
@@ -127,13 +136,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function changeGiscusTheme() {
+    const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    function sendMessage(message) {
+      const iframe = document.querySelector('iframe.giscus-frame');
+      if (!iframe) return;
+      iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+    }
+
+    sendMessage({
+      setConfig: {
+        theme: theme,
+      },
+    });
+  }
+
   // Event listener for theme toggle button
   const themeToggleButton = document.querySelector(".btn-dark");
   themeToggleButton.addEventListener("click", function () {
     // Toggle dark mode class on the html element
-    document.documentElement.classList.toggle("dark");
-    
+    // document.documentElement.classList.toggle("dark");
+    const particlesElement = document.getElementById("particles-js");
     // Refresh particles to update colors
-    refreshParticles();
+    if (particlesElement) {
+      refreshParticles();
+    }
+    changeGiscusTheme();
   });
+
+  // Initial particle setup
+  initParticles();
 });

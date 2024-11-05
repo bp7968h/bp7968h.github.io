@@ -66,4 +66,18 @@ url = "$BASE_URL/archives"
 [extra.footer]
 since = 2024
 license = "bp7968h"
-license_url = "https://bhuwanpandit.me/home"
+license_url = "https://bhuwanpandit.me"
+
+[extra.giscus]
+repo = "bp7968h/bp7968h.github.io"
+repo_id = "R_kgDOLTnpRw"
+category = "Post Comments"
+category_id = "DIC_kwDOLTnpR84CjwXr"
+mapping = "pathname"
+strict = 1
+reactions_enabled = 1
+emit_metadata = 0
+input_position = "top"
+theme = "dark"
+lang = "en"
+loading = "lazy"
