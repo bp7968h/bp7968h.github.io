@@ -18,7 +18,7 @@ highlight_theme = "base16-ocean-dark"
 
 [extra]
 math = false
-mermaid = true
+mermaid = false
 comment = true
 social_image = "icons/github.svg"
 
