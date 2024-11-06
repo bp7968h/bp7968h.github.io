@@ -46,6 +46,20 @@ url = "$BASE_URL/rss.xml"
 name = "readdotcv"
 url = "https://drive.google.com/file/d/1v5_CHJ8Dix1Q169y9NndFz7_bveO0NOg/view?usp=sharing"
 
+[[extra.profile.journey]]
+title = "Lorem Ipsum 1"
+date = "2022 May - 2024 April"
+desc = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, nisi saepe dolor unde iusto dolore nam, vero optio consequuntur repudiandae et! Atque libero expedita laudantium cupiditate, sit explicabo sequi ipsa!"
+relation = "education"
+logo = "icons/bug.svg"
+
+[[extra.profile.journey]]
+title = "Lorem Ipsum 2"
+date = "2022 May - 2024 April"
+desc = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, nisi saepe dolor unde iusto dolore nam, vero optio consequuntur repudiandae et! Atque libero expedita laudantium cupiditate, sit explicabo sequi ipsa!"
+relation = "work"
+logo = "icons/email.svg"
+
 [[extra.menu]]
 name = "Home"
 url = "$BASE_URL"

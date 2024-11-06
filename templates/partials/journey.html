@@ -1,1 +1,18 @@
-<h2 class="font-bold">My Journey</h2>
+<h2 class="font-bold">Journey</h2>
+<div>
+    {% if config.extra.profile.journey is defined %}
+        {% for item in config.extra.profile.journey %}
+            <div class="journey-item">
+                <h3>{{ item.title }}</h3>
+                <p><strong>Date:</strong> {{ item.date }}</p>
+                <p><strong>Description:</strong> {{ item.desc }}</p>
+                <p><strong>Relation:</strong> {{ item.relation }}</p>
+                {% if item.logo %}
+                    <img src="{{ item.logo }}" alt="{{ item.title }}" class="journey-logo">
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No journey data found.</p>
+    {% endif %}
+</div>
