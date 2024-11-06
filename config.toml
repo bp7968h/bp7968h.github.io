@@ -43,8 +43,7 @@ name = "rss"
 url = "$BASE_URL/rss.xml"
 
 [[extra.profile.social]]
-name = "Resume"
-logo = "readdotcv"
+name = "readdotcv"
 url = "https://drive.google.com/file/d/1v5_CHJ8Dix1Q169y9NndFz7_bveO0NOg/view?usp=sharing"
 
 [[extra.menu]]
