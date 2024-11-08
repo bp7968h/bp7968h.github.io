@@ -1,104 +1,52 @@
 <div class="flex flex-col items-center pb-4 pt-12 xl:px-12">
-<h2 class="font-bold">Journey</h2>
-<!-- <div>
+  <h2 class="font-bold">Journey</h2>
+  <div class="relative container mx-auto px-6 flex flex-col space-y-8">
+    <div
+      class="absolute z-0 w-2 h-full bg-gray-200 dark:bg-dark-gray-4 shadow-md inset-0 left-17 md:mx-auto md:right-0 md:left-0"
+    >
+    </div>
     {% if config.extra.profile.journey is defined %}
         {% for item in config.extra.profile.journey %}
-            <div class="journey-item">
-                <h3>{{ item.title }}</h3>
-                <p><strong>Date:</strong> {{ item.date }}</p>
-                <p><strong>Description:</strong> {{ item.desc }}</p>
-                <p><strong>Relation:</strong> {{ item.relation }}</p>
-                {% if item.logo %}
-                    <img src="{{ item.logo }}" alt="{{ item.title }}" class="journey-logo">
-                {% endif %}
+            <div class="relative z-10">
+                <img
+                  src="{{ get_url(path=item.image_url) }}"
+                  alt="{{ item.title }}"
+                  class="my-8 h-24 w-24 object-cover !rounded-full border-white dark:border-dark-gray-3 shadow-md border-4 xs:absolute md:mx-auto md:left-0 md:right-0"
+                />
+                <div class="relative pt-2 xs:pl-28 xs:my-8 md:w-1/2 md:ml-auto md:pl-16">
+                  <div
+                    class="absolute inset-0 left-10 h-4 w-4 transform rotate-45 bg-gray-200 dark:bg-dark-gray-4 xs:top-11 xs:left-26 md:left-14"
+                    aria-hidden="true"
+                  ></div>
+                  <span
+                    class="!bg-red-400 dark:!bg-red-900 py-1 px-2 md:py-0.5 md:px-1 lg:py-1 lg:px-2 rounded-md font-bold absolute left-auto right-1 top-3"
+                  >
+                    {{ item.part }}
+                  </span>
+                  <div class="bg-gray-200 dark:bg-dark-gray-4 p-6 rounded-md shadow-md">
+                    <div
+                      class="md:absolute md:pl-8 md:right-full md:top-4 min-w-96 flex flex-col items-center justify-center"
+                    >
+                      <span class="font-bold text-sm tracking-wide self-start">
+                          {{ item.date }}
+                      </span>
+                      <h3 class="my-0 text-2xl xs:text-xl sm:text-2xl font-bold pt-1 w-full">
+                        {{ item.title }}
+                      </h3>
+                      <span class="font-bold text-sm tracking-wide self-start pb-1">
+                          {{ item.address }}
+                      </span>
+                    </div>
+                    <h4 class="my-0 text-2xl xs:text-xl sm:text-2xl md:text-xl font-bold pt-1 underline md:no-underline">
+                        {{ item.sub_title }}
+                    </h4>
+                    <p class="pt-1">
+                      {{ item.description }}
+                    </p>
+                  </div>
+                </div>
             </div>
         {% endfor %}
-    {% else %}
-        <p>No journey data found.</p>
     {% endif %}
-</div> -->
-<!-- 
-light area: #00000008 text: black
-dark area: #ffffff26 text: white
--->
-<div class="relative container mx-auto px-6 flex flex-col space-y-8">
-    <div
-        class="absolute z-0 w-2 h-full bg-white shadow-md inset-0 left-17 md:mx-auto md:right-0 md:left-0"
-    ></div>
-    <div class="relative z-10">
-            <img
-                src="https://images.pexels.com/photos/885880/pexels-photo-885880.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100"
-                alt=""
-                class="not-prose my-8 h-24 w-24 object-cover rounded-full shadow-md border-4 border-white xs:absolute md:mx-auto md:left-0 md:right-0"
-            />
-        <div class="relative pt-2 xs:pl-28 xs:pt-0 xs:my-8 md:w-1/2 md:ml-auto md:pl-16">
-            <div class="absolute inset-0 left-10 h-4 w-4 transform rotate-45 bg-white xs:top-11 xs:left-26 md:left-14" aria-hidden="true"></div>
-            <div class="bg-white p-6 rounded-md shadow-md dark:text-black">
-                <span
-                    class="font-bold text-black text-sm tracking-wide"
-                    >Jan 2021</span
-                >
-                <h1 class="text-2xl font-bold pt-1 dark:text-black">
-                    An amazing travel
-                </h1>
-                <p class="pt-1">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing
-                    elit. Ex iste suscipit reiciendis, perferendis vel
-                    consequuntur cupiditate ad commodi provident,
-                    sapiente veniam sed autem.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="relative z-10">
-        <img
-            src="https://images.pexels.com/photos/885880/pexels-photo-885880.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100"
-            alt=""
-            class="not-prose my-8 h-24 w-24 object-cover rounded-full shadow-md border-4 border-white xs:absolute md:mx-auto md:left-0 md:right-0"
-        />
-    <div class="relative pt-2 xs:pl-28 xs:pt-0 xs:my-8 md:w-1/2 md:ml-auto md:pl-16 md:ml-0 md:mr-auto md:pl-0 md:pr-16">
-        <div class="absolute inset-0 left-10 h-4 w-4 transform rotate-45 bg-white xs:top-11 xs:left-26 md:left-14 md:left-auto md:right-14" aria-hidden="true"></div>
-        <div class="bg-white p-6 rounded-md shadow-md dark:text-black">
-            <span
-                class="font-bold text-black text-sm tracking-wide"
-                >Jan 2021</span
-            >
-            <h1 class="text-2xl font-bold pt-1 dark:text-black">
-                An amazing travel
-            </h1>
-            <p class="pt-1">
-                Lorem ipsum dolor, sit amet consectetur adipisicing
-                elit. Ex iste suscipit reiciendis, perferendis vel
-                consequuntur cupiditate ad commodi provident,
-                sapiente veniam sed autem.
-            </p>
-        </div>
-    </div>
-</div>
-<div class="relative z-10">
-    <img
-        src="https://images.pexels.com/photos/885880/pexels-photo-885880.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100"
-        alt=""
-        class="not-prose my-8 h-24 w-24 object-cover rounded-full shadow-md border-4 border-white xs:absolute md:mx-auto md:left-0 md:right-0"
-    />
-<div class="relative pt-2 xs:pl-28 xs:pt-0 xs:my-8 md:w-1/2 md:ml-auto md:pl-16">
-    <div class="absolute inset-0 left-10 h-4 w-4 transform rotate-45 bg-white xs:top-11 xs:left-26 md:left-14" aria-hidden="true"></div>
-    <div class="bg-white p-6 rounded-md shadow-md dark:text-black">
-        <span
-            class="font-bold text-black text-sm tracking-wide"
-            >Jan 2021</span
-        >
-        <h1 class="text-2xl font-bold pt-1 dark:text-black">
-            An amazing travel
-        </h1>
-        <p class="pt-1">
-            Lorem ipsum dolor, sit amet consectetur adipisicing
-            elit. Ex iste suscipit reiciendis, perferendis vel
-            consequuntur cupiditate ad commodi provident,
-            sapiente veniam sed autem.
-        </p>
-    </div>
-</div>
-</div>
-</div>
+  </div>
 </div>
