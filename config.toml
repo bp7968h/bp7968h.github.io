@@ -37,7 +37,7 @@ social = [
 ]
 journey = [
     { date = "April 2024 - Present", title = "Chichester District Council", address = "United Kindom, Chichester", sub_title = "ICT Development Officer", description = "Building dynamic e-forms and automated processes using HTML, CSS, and JavaScript, ensuring GDPR compliance. Managing CMS, documenting systems, supporting web services, and enhancing accessibility (WCAG 2.1) while optimizing workflows.", part = "Work", image_url = "icons/bug.svg" },
-    { date = "May 2023 - May 2024",title = "University of Greenwich", address = "United Kindom, Greenwich", sub_title = "Junior Software Developer", description = "Conducted research for the EUNOMIA project, deploying the instance from scratch. Led Yak software development using Mongodb, Expressjs, React and Node.js. Designed tests, implemented CI/CD pipelines, and authored documentation.I am trying to have a timeline in my website, so I need the event type, for example Work, Education and other? Utilized Agile methodology to deliver and deploy scalable solutions.", part = "Work", image_url = "icons/email.svg" }
+    { date = "May 2023 - May 2024",title = "University of Greenwich", address = "United Kindom, Greenwich", sub_title = "Junior Software Developer", description = "Conducted research for the EUNOMIA project, deploying the instance from scratch. Led Yak software development using Mongodb, Expressjs, React and Node.js. Designed tests, implemented CI/CD pipelines, and authored documentation.", part = "Work", image_url = "icons/email.svg" }
 ]
 
 [[extra.menu]]
