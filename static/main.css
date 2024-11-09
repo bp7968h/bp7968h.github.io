@@ -1267,10 +1267,6 @@ pre table td:nth-of-type(1) {
   right: 0.25rem;
 }
 
-.right-17 {
-  right: 68px;
-}
-
 .top-0 {
   top: 0px;
 }
@@ -1493,24 +1489,12 @@ pre table td:nth-of-type(1) {
   width: 100%;
 }
 
-.min-w-72 {
-  min-width: 18rem;
-}
-
 .min-w-\[50\%\] {
   min-width: 50%;
 }
 
 .min-w-full {
   min-width: 100%;
-}
-
-.min-w-80 {
-  min-width: 20rem;
-}
-
-.min-w-96 {
-  min-width: 24rem;
 }
 
 .max-w-3xl {
@@ -1719,9 +1703,19 @@ pre table td:nth-of-type(1) {
   background-color: rgb(0 0 0 / 0.05) !important;
 }
 
-.\!bg-red-400 {
+.\!bg-blue-400 {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity)) !important;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity)) !important;
+}
+
+.\!bg-rose-400 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(251 113 133 / var(--tw-bg-opacity)) !important;
+}
+
+.\!bg-teal-400 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(45 212 191 / var(--tw-bg-opacity)) !important;
 }
 
 .bg-\[var\(--admonition-bg\)\] {
@@ -1749,6 +1743,14 @@ pre table td:nth-of-type(1) {
 
 .bg-white\/50 {
   background-color: rgb(255 255 255 / 0.5);
+}
+
+.bg-\[linear-gradient\(to_right\2c \#80808012_1px\2c transparent_1px\)\2c linear-gradient\(to_bottom\2c \#80808012_1px\2c transparent_1px\)\] {
+  background-image: linear-gradient(to right,#80808012 1px,transparent 1px),linear-gradient(to bottom,#80808012 1px,transparent 1px);
+}
+
+.bg-\[size\:24px_24px\] {
+  background-size: 24px 24px;
 }
 
 .object-cover {
@@ -1842,6 +1844,10 @@ pre table td:nth-of-type(1) {
   padding-bottom: 0.625rem;
 }
 
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
+
 .pb-4 {
   padding-bottom: 1rem;
 }
@@ -1880,6 +1886,14 @@ pre table td:nth-of-type(1) {
 
 .pt-32 {
   padding-top: 8rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
 }
 
 .text-center {
@@ -1969,14 +1983,6 @@ pre table td:nth-of-type(1) {
 
 .no-underline {
   text-decoration-line: none;
-}
-
-.underline-offset-2 {
-  text-underline-offset: 2px;
-}
-
-.underline-offset-1 {
-  text-underline-offset: 1px;
 }
 
 .antialiased {
@@ -2228,9 +2234,19 @@ canvas {
   border-color: rgb(113 113 122 / var(--tw-border-opacity));
 }
 
-.dark\:\!bg-red-900:is(.dark *) {
+.dark\:\!bg-blue-900:is(.dark *) {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(127 29 29 / var(--tw-bg-opacity)) !important;
+  background-color: rgb(30 58 138 / var(--tw-bg-opacity)) !important;
+}
+
+.dark\:\!bg-rose-900:is(.dark *) {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(136 19 55 / var(--tw-bg-opacity)) !important;
+}
+
+.dark\:\!bg-teal-900:is(.dark *) {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(19 78 74 / var(--tw-bg-opacity)) !important;
 }
 
 .dark\:bg-dark-gray-4:is(.dark *) {
@@ -2291,23 +2307,9 @@ canvas {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
-
-  .xs\:underline {
-    text-decoration-line: underline;
-  }
 }
 
 @media (min-width: 640px) {
-  .sm\:text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  .sm\:text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-
   .sm\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
@@ -2331,12 +2333,20 @@ canvas {
     left: auto;
   }
 
+  .md\:left-full {
+    left: 100%;
+  }
+
   .md\:right-0 {
     right: 0px;
   }
 
   .md\:right-14 {
     right: 3.5rem;
+  }
+
+  .md\:right-17 {
+    right: 68px;
   }
 
   .md\:right-full {
@@ -2398,6 +2408,10 @@ canvas {
     padding-left: 0px;
   }
 
+  .md\:pl-10 {
+    padding-left: 2.5rem;
+  }
+
   .md\:pl-16 {
     padding-left: 4rem;
   }
@@ -2406,22 +2420,14 @@ canvas {
     padding-right: 4rem;
   }
 
-  .md\:pl-2 {
-    padding-left: 0.5rem;
-  }
-
-  .md\:pl-8 {
-    padding-left: 2rem;
-  }
-
   .md\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
   }
 
-  .md\:text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
+  .md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 
   .md\:text-xl {
@@ -2499,6 +2505,19 @@ canvas {
     padding-bottom: 0.25rem;
   }
 
+  .lg\:pl-16 {
+    padding-left: 4rem;
+  }
+
+  .lg\:pl-24 {
+    padding-left: 6rem;
+  }
+
+  .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
   .lg\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
@@ -2514,5 +2533,9 @@ canvas {
   .xl\:px-12 {
     padding-left: 3rem;
     padding-right: 3rem;
+  }
+
+  .xl\:pl-24 {
+    padding-left: 6rem;
   }
 }
