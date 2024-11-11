@@ -99,6 +99,9 @@
   <!-- Dark Icon -->
   <link rel="preload" as="image" href="{{ get_url(path=`icons/theme.svg`) }}" />
 
+  <! --   Preload Post Images -->
+  {% include "injects/preload_blog_images.html" ignore missing %}
+  
   <!-- Math -->
   {% if page.extra.math | default(value=config.extra.math) %}
   <!---->
