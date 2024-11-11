@@ -14,6 +14,7 @@ Tree is one of the fundamental data structure that we come across in programming
 ## Tree in General
 As I mentioned earlier, tree lets us represent data in hierarchical, meaning they are connected with each other. To visualize this, think of a real tree turned upside down, where the root starts at the top and branches out downwards as shown in the image below.
 
+<a name="tree-data-structure-visualization"></a>
 ![Tree Data Structure Visualization](tree_visualization.png)
 
 In tree data structure, `node` is a individual element that can hold data and can have connections to other nodes. Here in the [above image](#tree-data-structure-visualization), all the `elements numbered` are `nodes` of that particular tree. The `root/root node` is the topmost node, from which every other nodes descends. Each connections between nodes is called an `edge`. Nodes that don’t have any children are called `leaves/ leaf node`, and nodes with children are called `internal nodes` or sometimes also called `parent node`. Nodes that are descendant of another node are called `child node`. Also the `depth of the node` is the length of the path from the root to the node itself. The `level of a node` is how far the node is from the root (root is at `level 0` or some people also prefer to say that the root is at `level 1`). The `height of the tree` is the number of edges on the longest path from the root node to the leaf node. You can refer to below image to visualize these terminologies.
