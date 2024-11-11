@@ -5,7 +5,7 @@ description = "Sample article showcasing basic Markdown syntax and formatting fo
 [taxonomies]
 tags = ["rust", "data-structure", "tree"]
 [extra]
-cover.image = "implementing-binary-tree/cover-image.jpg"
+cover.image = "implementing-binary-tree/cover-image.webp"
 cover.alt = "Image displaying tree"
 +++
 
