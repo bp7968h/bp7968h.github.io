@@ -1,7 +1,7 @@
 +++
 title = "Implementing Binary Tree in Rust"
 date = "2022-11-05"
-description = "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
+description = "Explore the fundamentals of tree data structures and their applications, with a focus on implementing binary trees in Rust. Perfect for those with basic Rust knowledge, this guide offers key concepts and practical tips."
 [taxonomies]
 tags = ["rust", "data-structure", "tree"]
 [extra]
