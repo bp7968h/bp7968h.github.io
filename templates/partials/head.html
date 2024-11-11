@@ -100,7 +100,7 @@
   <link rel="preload" as="image" href="{{ get_url(path=`icons/theme.svg`) }}" />
 
   <! --   Preload Post Images -->
-  {% if current_path and current_path == '/blogs' %}
+  {% if current_path and current_path == '/blogs/' %}
     {% include "injects/preload_blog_images.html" ignore missing %}
   {% endif %}
   
