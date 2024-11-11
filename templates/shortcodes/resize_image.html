@@ -1,4 +1,4 @@
-{% set image = resize_image(path=path, width=width, height=height, op=op) %}
+{% set image = resize_image(path=path, width=520, height=345, op="fit", format="webp") %}
 <img
   class = "rounded-lg"
   src="{{ image.url }}"
