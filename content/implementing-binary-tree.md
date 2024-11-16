@@ -3,13 +3,14 @@ title = "Implementing Binary Tree in Rust"
 date = "2022-11-05"
 description = "Explore the fundamentals of tree data structures and their applications, with a focus on implementing binary trees in Rust. Perfect for those with basic Rust knowledge, this guide offers key concepts and practical tips."
 [taxonomies]
-tags = ["rust", "data-structure", "tree"]
+tags = ["rust", "data structure", "tree", "algorithm"]
 [extra]
 cover.image = "implementing-binary-tree/cover-image.webp"
 cover.alt = "Image displaying tree"
 +++
 
-Tree is one of the fundamental data structure that we come across in programming paradigm. They are used extensively in areas like `databases`, `compilers`, `file systems` and many more areas, providing a hierarchical structure that enables fast data access, insertion and deletion. In this blog, we will go through the basics of tree, dive deeper into `binary tree` (most used type of tree) and ultimately implement one using `Rust`. I assume you’re familiar with some basic Rust syntax but I’ll explain key concepts and share helpful tips along the way.
+## Overview
+Tree is one of the fundamental data structure that we come across in programming paradigm. They are used extensively in areas like `databases`, `compilers`, `file systems` and many more areas, providing a hierarchical structure that enables fast data access, insertion and deletion. In this blog, we will go through the basics of tree, dive deeper into `binary tree` (most used type of tree) and ultimately implement `binary search tree` (one type of binary tree) using `Rust`. I assume you’re familiar with some basic Rust syntax but I’ll explain key concepts and share helpful tips along the way.
 
 ## Tree in General
 As I mentioned earlier, tree lets us represent data in hierarchical, meaning they are connected with each other. To visualize this, think of a real tree turned upside down, where the root starts at the top and branches out downwards as shown in the image below.
@@ -24,14 +25,59 @@ In tree data structure, `node` is a individual element that can hold data and ca
 Also, a `subtree` in a tree refers to any node along with all of it's descendents. It represents a "mini-tree" that begins at a particular node and includes all nodes reachable from it in the hierarchical structure. For example; in the above image if we just focus on `node 3`, and take all of it's decendents  `node 6, 7 and 9`, we can see a small tree forming there starting from node numbered `3`.
 
 ## Introducing the Binary Tree
-Now that we’ve covered the general concept of trees, let's focus on a specific type of tree known as the `binary tree`. A binary tree is a tree in which each node can have `at most two children`, often referred to as `left child/children` and `right child/children`.
+Now that we’ve covered the general concept of trees, let's focus on a specific type of tree known as the `binary tree`. A binary tree is a tree in which each node can have `at most two children`(only zero, one or two), often referred to as `left child/children` and `right child/children`. In binary tree we also have a relation such that, a binary tree with `n levels (or height h)` can have maximum of (2<sup>n+1</sup> - 1) nodes. For example: if we have a binary tree of `height 2` then we can only have `maximum of 7 nodes`.
+
+$$
+\text{For height/level 2 we can solve for maximum nodes as follow:} \newline
+\text{we have,} \implies (2^{n+1} - 1) \newline
+= 2^{2 + 1} - 1 \newline
+= 2^3 - 1 \newline
+= 8 - 1 \newline
+= 7 \newline
+\text{Hence, binary tree with height 2 can have maximum of 7 nodes}
+$$
 
 ### Types of Binary Trees
 Before diving into the implementation, let’s look at different types of binary trees, each with unique characteristics:
 
-1. `Full Binary Tree`: In a full binary tree, every node has either 0 or 2 children (no node has only one child).
+- `Full Binary Tree`
+
+In a full binary tree, every node has either 0 or 2 children (no node has only one child).
 
 ![Full Binary Tree](full_binary_tree.png)
 
-1. `Perfect Binary Tree`: This is a stricter version of full binary tree in which all interior nodes must have two children and all leaf nodes are at the same level.
+If you carefully look into the image, you can also see a pattern, that is the `number of leaf nodes` is equal to the `number of parent/internal node + 1`. 
+
+- `Perfect Binary Tree`
+
+This is a stricter version of full binary tree in which all interior nodes must have two children and all leaf nodes must be at the same level.
+
+```markdown
+     1                 1
+   /   \             /   \
+  2     3           2     3
+ / \   / \         / \   / \
+4   5 6   7       4   5 6   7
+```
+
+- `Complete Binary Tree`
+
+- `Balanced Binary Tree`
+- `Degenerate (or Pathological) Tree`
+- `Skewed Binary Tree (Left-skewed, Right-skewed)`
+- `AVL Tree`
+- `Red-Black Tree`
+- `Splay Tree`
+- `Treap`
+- `Binary Search Tree (BST)`
+- `Binary Indexed Tree (Fenwick Tree)`
+- `Segment Tree`
+- `Cartesian Tree`
+- `Threaded Binary Tree`
+- `Heaps (Max Heap, Min Heap)`
+- `B-Tree`
+- `AA Tree`
+- `2-3 Tree`
+- `2-3-4 Tree`
+- `Weight Balanced Tree`
 
