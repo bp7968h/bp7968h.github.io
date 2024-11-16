@@ -1,12 +1,13 @@
 +++
+path = "blogs/implementing-binary-tree"
 title = "Implementing Binary Tree in Rust"
-date = "2022-11-05"
+date = "2024-11-05"
 description = "Explore the fundamentals of tree data structures and their applications, with a focus on implementing binary trees in Rust. Perfect for those with basic Rust knowledge, this guide offers key concepts and practical tips."
 [taxonomies]
 tags = ["rust", "data structure", "tree", "algorithm"]
 [extra]
-cover.image = "implementing-binary-tree/cover-image.webp"
-cover.alt = "Image displaying tree"
+cover.image = "cover/cover-image-tree.webp"
+cover.alt = "Tree"
 +++
 
 ## Overview
@@ -51,14 +52,6 @@ If you carefully look into the image, you can also see a pattern, that is the `n
 - `Perfect Binary Tree`
 
 This is a stricter version of full binary tree in which all interior nodes must have two children and all leaf nodes must be at the same level.
-
-```markdown
-     1                 1
-   /   \             /   \
-  2     3           2     3
- / \   / \         / \   / \
-4   5 6   7       4   5 6   7
-```
 
 - `Complete Binary Tree`
 
