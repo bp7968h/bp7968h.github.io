@@ -11,14 +11,14 @@ cover.alt = "Database from Scratch in Rust"
 +++
 
 ## Overview
-Databases. You hear about them everywhere. They're crucial for efficiently storing, retrieving, and managing data. I've used databases a lot throughout my journey as a developer, but every now and then, I’d find myself wondering, `how the hell does this thing actually work?`
+Databases, we hear about them everywhere. They're crucial for efficiently storing, retrieving, and managing data. I've used databases a lot throughout my journey as a developer, but every now and then, I’d find myself wondering, `how the hell does this thing actually work?`
 
-To be honest, until now, I just moved on. But last night, I had one of those moments where I thought, `Hey, I know a bit of Rust (not an expert, haha), so why not try building one?` This project will be a great excuse to dive deeper into Rust and, more importantly, to finally understand how databases work under the hood. Plus, let's be real, I can brag about it to my friends and maybe sneak it into my resume too, haha.
+To be honest, until now, I just had that curiosity but still moved on. But last night, I had one of those moments where I thought, `Hey, I know a bit of Rust (not an expert, haha), so why not try building one?` This project will be a great excuse to dive deeper into Rust and, more importantly, to finally understand how databases work under the hood. Plus, let's be real, I can brag about it to my friends and maybe sneak it into my resume too 😉.
 
 ## The Implementation Plan
-So here’s the deal: I have zero idea how databases work internally at the moment. I’ve browsed through some tutorials and blogs, and there’s a ton of great stuff out there. But this project isn’t about copying someone else's work—`it's about learning`. For this I will only refer to the [SQLite documentation](https://www.sqlite.org/) and the [Rust standard library](https://doc.rust-lang.org/std/index.html) itself.
+So here’s the deal: I have zero idea how databases work internally at the moment. I’ve browsed through some tutorials and blogs, and there’s a ton of great stuff out there. But this project isn’t about copying someone else's work—`it's about learning`. For this I will only refer to the [SQLite docs](https://www.sqlite.org/) and the [Rust standard library docs](https://doc.rust-lang.org/std/index.html).
 
-Keep in mind, I’m not trying to build a fully-fledged, production-ready database here. This will be a `toy database` for the sole purpose of `learning`. Below are the features I plan to implement:
+Keep in mind, we are not trying to build a fully-fledged, production-ready database here. This will be a `toy database` for the sole purpose of `learning`. Below are the features I plan to implement:
 
 - Create/Delete databases
 - Create/Alter/Delete tables
@@ -27,39 +27,40 @@ Keep in mind, I’m not trying to build a fully-fledged, production-ready databa
 - Indexing and data persistence
 - ACID compliance (Atomicity, Consistency, Isolation, Durability)
 - Allowing access to the database over the network
+- Maybe JOIN, WHERE (`not sure yet!`) 
 
 Oh, and I just realized—I haven’t named the database yet. Let’s call it `bhu_db`. Simple, easy to remember, and it kind of has a nice ring to it haha. 
 
 ## Crawling the SQLite Docs
-Alright, so before we get our hands dirty with code, I need to do some research. I decided that my primary source of reference will be the [SQLite documentation](https://www.sqlite.org/). It’s a goldmine of information, and since SQLite is lightweight and easy to understand, it's perfect for our use case.
+Alright, so before we get our hands dirty with code, We need to do some research. I decided that my primary source of reference will be the [SQLite docs](https://www.sqlite.org/). It’s a goldmine of information, and since SQLite is lightweight and easy to understand, it's perfect for our use case.
 
 After looking for the right part finnaly got the document that I wanted; "[Architecture of SQLite](https://www.sqlite.org/arch.html)". Below is the image that I just screenshotted from there and this gives us a clear components that we need to build, but I will cut corners probably, I am not sure haha.
 
 ![SQLite Architecture](sqlite-architecture.webp)
 
-Ok, got what I need, I will start from top to bottom that is from Interface and then go downwards.
+Ok, got what we need, we will start from top to bottom that is from Interface and then go downwards into the core components.
 
 ## Coding Plan
-The database will use a client-server architecture, but for now, my plan is to use a simple `REPL (Read-Eval-Print Loop)` until I implement the networking protocol between the client and server. The image below describes the initial work plan, as well as the end goal as I continue building it.
+The database will use a client-server architecture, but for time being we will use a simple `REPL (Read-Eval-Print Loop)` until we implement the networking protocol between the client and server. The image below describes the initial work plan, as well as the end goal as I continue building it.
 
 ![Initial Work Plan](initial-plan.webp)
 
-In short, the REPL will serve as the interface between the user and the database for the time being. The user input will be tokenized, parsed, and processed, resulting in the final output.
+In short, the REPL will serve as the interface between the user and the database(backend) for the time being. The user input will be tokenized, parsed, and processed, resulting in the final output.
 
 ![Final Work Plan](final-plan.webp)
 
-As I keep building, the plan is to eventually allow users to connect to the database server using a client. The server will expose a TCP port and listen for user input through a simple protocol that I will implement. The rest of the architecture will remain the same as the initial plan, and finally, the user will receive the query results.
+As I keep building, the plan is to eventually allow users to connect to the database server using a client. The server will expose a TCP port and listen for user input through a simple protocol that I will implement. The rest of the architecture will remain the same as the initial plan, and finally, the user will receive the query results through network.
 
 Ok, let's fire up the code editor and setup the project.
 
 ## Getting Started
-Alright, before diving into the code, I need to set up a solid foundation. This will be our first step in building `bhu_db`. 
+Alright, before diving into the code, we need to set up a solid foundation. This will be our first step in building `bhu_db`. 
 
 ### Pre-requisites
 Make sure you have Rust installed. You can install Rust by following the instructions from the [official Rust website](https://www.rust-lang.org/learn/get-started).
 
 ### Project Initialization
-We'll use Cargo to initialize a `library` project (which does not contain a `main function` by default). This project will include a couple of `binary` targets (each containing its own `main function`) within the same project.
+We'll use Cargo to initialize a `library` project (which does not contain a `main function` by default). This project will also include a couple of `binary` targets (each containing its own `main function`) within the same project.
 ```bash
 cargo new bhu_db --lib
 cd bhu_db
@@ -97,7 +98,7 @@ cargo run --bin <repl/client/server>
 Alright, this concludes our initial file and folder setup. Now, it’s time to start coding!
 
 ## Simple REPL
-A `REPL (Read-Eval-Print Loop)` is an interactive environment where user inputs are `read`, `evaluated`, and the results are `printed` back to the user. For our database, we need a simple loop that will run indefinitely, wait for user input, and take actions based on that input. For example, we'll exit the loop (break the loop) when the user types exit. Here’s how we can achieve that by editing the `src/bin/repl/main.rs` file:
+A `REPL (Read-Eval-Print Loop)` is an interactive environment where user inputs are `read`, `evaluated`, and the results are `printed` back to the user. For our database, we need a simple loop that will run indefinitely, wait for user input, and take actions based on that input. For example, we'll exit the loop (break the loop) when the user types `exit`. Here’s how we can achieve that by editing the `src/bin/repl/main.rs` file:
 
 ```rust
 use std::{io::{self, Write}, process};
@@ -181,3 +182,7 @@ Exiting bhu_db...
 ```
 
 This REPL will form the basis of our interaction with `bhu_db` for now, but as we continue, we'll extend it to handle more complex commands and eventually switch to a client-server model.
+
+## Lexer
+We can know this process with different names, that is `Tokenizer`, `Lexical Analysis` and others. However, the idea remains the same, we go through each and every character the user inputs and convert those to sequence of tokens which are meaningful units for further processing.
+
