@@ -375,13 +375,13 @@ impl fmt::Display for Token {
 Here's what each field means:
     - `token_type`: The type of the token (e.g., keyword, symbol, literal).
     - `lexeme`: The actual text from the input that forms this token.
-    - `iteral`: Optional literal value for tokens that represent values (e.g., numbers or strings).
+    - `literal`: Optional literal value for tokens that represent values (e.g., numbers or strings).
     - `line` and `column`: Metadata to track the token’s position in the input for error reporting.
 
-With the foundational components of the lexer in place, the next step is to implement the actual logic for reading input and generating tokens
+With the foundational components of the lexer in place, the next step is to implement the actual logic for reading input and generating tokens.
 
 #### The Lexer
-The lexer is the first major component of our database. It processes the raw input string, breaking it down into manageable pieces called tokens. These tokens represent meaningful units like keywords, identifiers, symbols, or literals. Let us start by defining the structure for the lexer and implement a associated method to create the instance of Lexer:
+The lexer is the first major component of our database. It processes the raw input string, breaking it down into manageable pieces called tokens. These tokens represent meaningful units like keywords, identifiers, symbols, or literals. Let us start by defining the structure for the lexer and implement an associated method to create the instance of Lexer:
 
 ```rust
 use std::{iter::Peekable, str::Chars};
