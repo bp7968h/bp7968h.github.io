@@ -1,4 +1,36 @@
 [[project]]
+name = "Lox-Editor - A Browser-based Code Editor for Lox"
+desc = "A React and TypeScript-powered browser-based code editor for the Lox programming language. It integrates with the Lox VM (written in Rust and compiled to WASM) to allow users to write, execute, and view output within a seamless web-based environment."
+features = [
+    "Built using React and TypeScript for a modern, interactive UI.",
+    "Integrates with the Lox VM (compiled to WebAssembly) for real-time code execution.",
+    "Supports syntax highlighting (non-realtime), keyboard navigation, and code execution.",
+    "Provides an output panel to display the results of executed Lox code.",
+    "Planned features include real-time highlighting, better error messages, and function/class support."
+]
+tags = ["React", "TypeScript", "WebAssembly", "Frontend Development"]
+links = [
+    { name = "live", url = "https://lox-editor.bhuwanpandit.me" },
+    { name = "github", url = "https://github.com/bp7968h/lox-editor" }
+]
+
+[[project]]
+name = "Lox Language - A Bytecode VM in Rust (Ongoing)"
+desc = "An implementation of the Lox programming language using Rust, featuring a Bytecode Virtual Machine (VM) compiled to WebAssembly (WASM). This project allows for fast execution of Lox code, supporting variables, loops, conditions, and logical operators. Inspired by Robert Nystrom's 'Crafting Interpreters'."
+features = [
+    "Implements a Bytecode Virtual Machine (VM) for Lox, compiled to WebAssembly (WASM).",
+    "Supports execution of variables, conditions, loops, and logical operators.",
+    "Uses Rust's memory safety and performance benefits for efficient execution.",
+    "Exposes `tokenize` (for syntax highlighting) and `compile_and_run` (for execution) functions.",
+    "Designed as a lightweight and embeddable VM for running Lox code in the browser."
+]
+tags = ["Rust", "WebAssembly", "Lox Language", "Virtual Machine", "Compilers"]
+links = [
+    { name = "github", url = "https://github.com/bp7968h/lox-rc" },
+    { name = "docs", url = "https://github.com/bp7968h/lox-rc#readme" }
+]
+
+[[project]]
 name = "Rusty Socket - WebSocket Implementation"
 desc = "Rusty Socket is a project focused on learning and implementing the WebSocket protocol (RFC 6455) from scratch using Rust. It includes a full-duplex communication channel over a single TCP connection, allowing both server and client communication. The project covers everything from establishing connections to handling WebSocket frames, opcodes, and message exchanges."
 features = [
