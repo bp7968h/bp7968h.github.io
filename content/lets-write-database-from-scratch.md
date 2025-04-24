@@ -13,7 +13,7 @@ cover.alt = "Database from Scratch in Rust"
 ## Overview
 Databases, we hear about them everywhere. They're crucial for efficiently storing, retrieving, and managing data. I've used databases a lot throughout my journey as a developer, but every now and then, I’d find myself wondering, `how the hell does this thing actually work?`
 
-To be honest, until now, I just had that curiosity but still moved on. But last night, I had one of those moments where I thought, `Hey, I know a bit of Rust (not an expert, haha), so why not try building one?` This project will be a great excuse to dive deeper into Rust and, more importantly, to finally understand how databases work under the hood. Plus, let's be real, I can brag about it to my friends and maybe sneak it into my resume too 😉.
+To be honest, until now, I just had that curiosity but still moved on. But last night, I had one of those moments where I thought, `Hey, I know a bit of Rust (not an expert), so why not try building one?` This project will be a great excuse to dive deeper into Rust and, more importantly, to finally understand how databases work under the hood. Plus, let's be real, I can brag about it to my friends and maybe sneak it into my resume too 😉.
 
 ## The Implementation Plan
 So here’s the deal: I have zero idea how databases work internally at the moment. I’ve browsed through some tutorials and blogs, and there’s a ton of great stuff out there. But this project isn’t about copying someone else's work—`it's about learning`. For this I will only refer to the [SQLite docs](https://www.sqlite.org/) and the [Rust standard library docs](https://doc.rust-lang.org/std/index.html).
@@ -30,12 +30,12 @@ Keep in mind, we are not trying to build a fully-fledged, production-ready datab
 - Maybe JOIN, WHERE (`not sure yet!`) 
 - And yes, we might refer to syntax from `mysql` as well
 
-Oh, and I just realized—I haven’t named the database yet. Let’s call it `bhu_db`. Simple, easy to remember, and it kind of has a nice ring to it haha. 
+Oh, and I just realized—I haven’t named the database yet. Let’s call it `bhu_db`. Simple, easy to remember, and it kind of has a nice ring to it. 
 
 ## Crawling the SQLite Docs
 Alright, so before we get our hands dirty with code, We need to do some research. I decided that my primary source of reference will be the [SQLite docs](https://www.sqlite.org/). It’s a goldmine of information, and since SQLite is lightweight and easy to understand, it's perfect for our use case.
 
-After looking for the right part finnaly got the document that I wanted; "[Architecture of SQLite](https://www.sqlite.org/arch.html)". Below is the image that I just screenshotted from there and this gives us a clear components that we need to build, but I will cut corners probably, I am not sure haha.
+After looking for the right part finnaly got the document that I wanted; "[Architecture of SQLite](https://www.sqlite.org/arch.html)". Below is the image that I just screenshotted from there and this gives us a clear components that we need to build, but I will cut corners probably, I am not sure yet.
 
 ![SQLite Architecture](sqlite-architecture.webp)
 
@@ -314,7 +314,7 @@ impl fmt::Display for Literal {
     }
 }
 ```
-Here, we also implemented `Display` trait so that we can print the Literal value and would be useful for debugging purpose.
+Here, we just copied all the different token type that are available, which is here just for an example, so that we can get the gist of how things are done. We also implemented `Display` trait so that we can print the Literal value and would be useful for debugging purpose.
 
 #### Defining Token Structure
 With the token types defined, we can now create a structure to represent a single token. Each token will include its `type`, `lexeme`, and `metadata` (like the position in the input).
@@ -373,8 +373,8 @@ impl fmt::Display for Token {
 }
 ```
 Here's what each field means:
-    - `token_type`: The type of the token (e.g., keyword, symbol, literal).
-    - `lexeme`: The actual text from the input that forms this token.
+    - `token_type`: The type of the token (e.g., keyword (TokenType::TABLE ...), symbol (TokenType::COMMA ...), literal (TokenType::VARCHAR ...)).
+    - `lexeme`: The actual text that is parsed from the user input which forms this token.
     - `iteral`: Optional literal value for tokens that represent values (e.g., numbers or strings).
     - `line` and `column`: Metadata to track the token’s position in the input for error reporting.
 
@@ -384,13 +384,15 @@ With the foundational components of the lexer in place, the next step is to impl
 The lexer is the first major component of our database. It processes the raw input string, breaking it down into manageable pieces called tokens. These tokens represent meaningful units like keywords, identifiers, symbols, or literals. Let us start by defining the structure for the lexer and implement a associated method to create the instance of Lexer:
 
 ```rust
+use super::token::Token;
 use std::{iter::Peekable, str::Chars};
 
 pub struct Lexer<'a> {
     source: Peekable<Chars<'a>>,
+    tokens: Vec<Token>,
     current: usize,
     line: usize,
-    column: usize,
+    start: usize,
     errors: Vec<String>,
 }
 
@@ -398,9 +400,10 @@ impl<'a> Lexer<'a>  {
     pub fn new(source: &'a str) -> Self {
         Lexer {
             source: source.chars().peekable(),
+            tokens: Vec::new(),
             current: 0,
             line: 1,
-            column: 1,
+            start: 0,
             errors: Vec::new(),
         }
     }
@@ -409,7 +412,11 @@ impl<'a> Lexer<'a>  {
 
 Here's what each field means:
     - `source`: Peekable iterator of characters, so that the lexer can inspect upcoming characters to decide how to group them into tokens, making it both efficient and flexible.
+    - `tokens`: Container to store tokens that will be generated as we tokenize the input.
     - `current`: Track the current position of the lexer.
-    - `line` and `column`: Metadata to track the lexer's position in the input for error reporting.
+    - `line`: Metadata to track the lexer's position in the input for error reporting.
+    - `start`: Track the start position of current token, where current will be at end, and then we can extract the actual characters from input.
     - `errors`: List of errors so we can inform the user of multiple error at once.
 
+#### Gut of Lexer
+Now that we have foundation for our lexer, 
