@@ -11,7 +11,7 @@ jobs:
         
       - name: Download Tailwind CSS Binary
         run: |
-          curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64
+          curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.13/tailwindcss-linux-x64
           chmod +x tailwindcss-linux-x64
           
       - name: Generate Minified CSS with Tailwind
