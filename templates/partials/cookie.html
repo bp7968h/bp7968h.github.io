@@ -1,0 +1,89 @@
+<div class="fixed bottom-4 right-4 flex w-80 flex-col space-y-4 rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800 z-50"
+    id="cookie-notice">
+    <span class="text-2xl font-semibold text-black dark:text-white">🍪 Cookie Notice</span>
+    <p class="text-black dark:text-white">
+        We use cookies to ensure that we give you the best experience on our website.
+    </p>
+    <div class="mt-4 flex justify-center">
+        <button id="decline-cookie-button"
+            class="text-red-600 hover:text-white hover:bg-red-600 py-2 px-4 rounded-lg font-bold transition-all duration-300">
+            Decline
+        </button>
+        <button id="accept-cookie-button"
+            class="text-green-600 hover:text-white hover:bg-green-600 py-2 px-4 rounded-lg font-bold transition-all duration-300">
+            Accept
+        </button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cookieNotice = document.getElementById('cookie-notice');
+        const acceptButton = document.getElementById('accept-cookie-button');
+        const declineButton = document.getElementById('decline-cookie-button');
+        const gtmNoscript = document.querySelector('noscript');
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cookieName) === 0) {
+                    return c.substring(cookieName.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function loadGTM() {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-P2J68HFX';
+            document.head.appendChild(script);
+
+            if (gtmNoscript) {
+                gtmNoscript.style.display = 'block';
+                gtmNoscript.style.visibility = 'visible';
+            }
+        }
+
+        const cookieConsentGiven = getCookie('cookie_consent');
+
+        if (cookieConsentGiven === 'true') {
+            loadGTM();
+            if (cookieNotice) {
+                cookieNotice.style.display = 'none';
+            }
+        } else {
+            if (cookieNotice) {
+                cookieNotice.style.display = 'block'; // Or your preferred display style
+            }
+        }
+
+        if (acceptButton && cookieNotice) {
+            acceptButton.addEventListener('click', function () {
+                setCookie('cookie_consent', 'true', 365);
+                loadGTM();
+                cookieNotice.style.display = 'none';
+            });
+        }
+
+        if (declineButton && cookieNotice) {
+            declineButton.addEventListener('click', function () {
+                setCookie('cookie_consent', 'false', 30);
+                cookieNotice.style.display = 'none';
+            });
+        }
+    });
+</script>
