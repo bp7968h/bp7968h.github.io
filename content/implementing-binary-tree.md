@@ -1,6 +1,7 @@
 +++
 path = "blogs/implementing-binary-tree"
 title = "Implementing Binary Tree"
+date = "2024-11-17"
 description = "This explores the fundamental process of creating a binary tree data structure in code. Learn how to define nodes and establish the parent-child relationships that characterize this hierarchical tree."
 [taxonomies] 
 tags = ["data structure", "tree", "rust"]
