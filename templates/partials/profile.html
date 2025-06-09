@@ -24,6 +24,7 @@
       {% for social in config.extra.profile.social %}
       <div class="flex group">
         <a
+          id="link-{{ social.name }}-ga"
           class="primary-link h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat]"
           style="--url: url({{ macros::get_social_icon(icon=social.name) }})"
           href="{{ social.url | replace(from=`$BASE_URL`, to=config.base_url) | safe  }}"
