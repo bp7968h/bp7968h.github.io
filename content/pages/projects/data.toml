@@ -1,4 +1,36 @@
 [[project]]
+name = "Epoll-Worker - High-Performance Server Framework"
+desc = "A high-performance, single-threaded event-driven server framework built from scratch in Rust using Linux epoll. Features direct system calls via FFI, flexible event handlers."
+features = [
+    "Built from scratch using Linux epoll with direct system calls via Rust FFI.",
+    "Flexible event handler system supporting broadcast, echo, HTTP, and custom protocols.",
+    "Edge-triggered events with EPOLLET flag for efficient event processing and handling thousands of qps.",
+    "Flexible event handler system with write buffering and backpressure handling."
+]
+tags = ["Rust", "Systems Programming", "Epoll", "Event Driven Architecture"]
+links = [
+    { name = "github", url = "https://github.com/bp7968h/epoll-worker" },
+    { name = "docs", url = "https://github.com/bp7968h/epoll-worker#readme" }
+]
+
+[[project]]
+name = "CHIP-8 Emulator - WebAssembly-Powered Retro Gaming"
+desc = "A high-performance CHIP-8 emulator featuring a Rust core compiled to WebAssembly and a responsive React frontend. Supports the complete CHIP-8 instruction set with accurate emulation, real-time CPU monitoring, and an intuitive web interface for playing classic retro games."
+features = [
+    "Built with Rust core compiled to WebAssembly for near-native performance in the browser.",
+    "Responsive React frontend with Tailwind CSS for modern, intuitive user experience.",
+    "Supports complete CHIP-8 instruction set with accurate 64x32 monochrome graphics rendering.",
+    "Real-time CPU status monitoring including FPS, registers (PC, SP, I), and last 10 executed opcodes.",
+    "Game library with curated classic ROMs and custom ROM upload functionality (.ch8/.chip8).",
+    "Play/Pause/Reset controls with live emulator status updates."
+]
+tags = ["Rust", "WebAssembly", "React", "TypeScript", "CHIP-8"]
+links = [
+    { name = "website", url = "https://chip8-emu.bhuwanpandit.me" },
+    { name = "github", url = "https://github.com/bp7968h/chip8-emu" }
+]
+
+[[project]]
 name = "Lox-Editor - A Browser-based Code Editor for Lox"
 desc = "A React and TypeScript-powered browser-based code editor for the Lox programming language. It integrates with the Lox VM (written in Rust and compiled to WASM) to allow users to write, execute, and view output within a seamless web-based environment."
 features = [
@@ -8,9 +40,9 @@ features = [
     "Provides an output panel to display the results of executed Lox code.",
     "Planned features include real-time highlighting, better error messages, and function/class support."
 ]
-tags = ["React", "TypeScript", "WebAssembly", "Frontend Development"]
+tags = ["Rust", "React", "TypeScript", "WebAssembly"]
 links = [
-    { name = "live", url = "https://lox-editor.bhuwanpandit.me" },
+    { name = "website", url = "https://lox-editor.bhuwanpandit.me" },
     { name = "github", url = "https://github.com/bp7968h/lox-editor" }
 ]
 
