@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html class="not-ready lg:text-base scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    Lets Write Database from Scratch - Bhuwan Pandit
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  <meta name="description" content="A lightweight, SQLite-like database in Rust with a focus on ACID compliance and core SQL functionalities. The primary goal is to learn the internals of database systems by building one from scratch." />
+  <meta name="author" content="Bhuwan Pandit" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lets Write Database from Scratch" />
+  <meta property="og:site_name" content="Bhuwan Pandit" />
+  <meta property="og:description" content="A lightweight, SQLite-like database in Rust with a focus on ACID compliance and core SQL functionalities. The primary goal is to learn the internals of database systems by building one from scratch." />
+  <meta property="og:url" content="https:&#x2F;&#x2F;bhuwanpandit.me&#x2F;blogs&#x2F;lets-write-database-from-scratch&#x2F;" />
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <meta property="og:image" content="https://bhuwanpandit.me/cover/cover-image-db.webp" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://bhuwanpandit.me/main.css" />
+  <link rel="manifest" href="https://bhuwanpandit.me/site.webmanifest" />
+  <style>
+    :root {
+      --bg: {
+          {
+          config.extra.style.bg_color | default(value="#f4f4f5")
+        }
+      }
+
+      ;
+
+      --bg-dark: {
+          {
+          config.extra.style.bg_dark_color | default(value="#18181b")
+        }
+      }
+
+      ;
+
+      --header: {
+          {
+          config.extra.style.header_color | default(value="#e4e4e7")
+        }
+      }
+
+      ;
+
+      --header-dark: {
+          {
+          config.extra.style.header_dark_color | default(value="#27272a")
+        }
+      }
+
+      ;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://bhuwanpandit.me/icons/theme.svg" />
+
+  <! -- Preload Post Images -->
+    
+
+    
+
+
+    <!-- Math -->
+    
+    <!---->
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () =>
+    renderMathInElement(document.body, {
+      // customised options
+      // • auto-render specific keys, e.g.:
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+      ],
+      // • rendering keys, e.g.:
+      throwOnError: false,
+    }),
+  );
+</script>
+
+    <!---->
+    
+    <!---->
+
+    <!-- Mermaid -->
+    
+    <!---->
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://bhuwanpandit.me/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://bhuwanpandit.me/apple-touch-icon.png" />
+
+    <!-- Feeds -->
+    
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https:&#x2F;&#x2F;bhuwanpandit.me&#x2F;blogs&#x2F;lets-write-database-from-scratch&#x2F;" />
+
+    <!-- Head inject -->
+    <script src="https://bhuwanpandit.me/particles.min.js" type="text/javascript" async></script>
+<script src="https://bhuwanpandit.me/cookie-consent.js"></script>
+<script type="text/javascript" src="https://bhuwanpandit.me/script.js" defer></script>
+</head>
+
+<body class="text-black duration-200 ease-out dark:text-white">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2J68HFX" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://bhuwanpandit.me">bp7968h</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://bhuwanpandit.me"
+            >Home</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://bhuwanpandit.me/projects"
+            >Projects</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://bhuwanpandit.me/blogs"
+            >Blogs</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://bhuwanpandit.me/archives"
+            >Archives</a
+          >
+        </li>
+        
+      </ul>
+      <!-- Header Nav inject -->
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+  <!-- Body Start inject -->
+  
+
+  <main
+    class="prose prose-neutral relative mx-auto min-h-[calc(100%-56px)] break-words px-4 pb-16 pt-32 dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg ">
+    
+<article>
+  <!-- Page Start inject -->
+  
+
+  <header class="mb-4">
+    <h1 class="!my-0 pb-2.5">Lets Write Database from Scratch</h1>
+    <div class="text-sm antialiased opacity-75">
+  
+  <time>2024-11-16</time>
+  <span class="mx-1">&middot;</span>
+  <span>13min</span>
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <span class="mx-1">&middot;</span>
+  <span>Bhuwan Pandit</span>
+  
+  <!-- Page Info inject -->
+  
+</div>
+
+      <!-- Post Taxonomies -->
+    
+<div class="mt-2 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-1 flex flex-wrap">
+    
+    <a
+      class="block-bg block-hover m-1 rounded-lg px-5 py-1.5 no-underline"
+      href="https://bhuwanpandit.me/tags/rust/"
+      >rust</a
+    >
+    
+    <a
+      class="block-bg block-hover m-1 rounded-lg px-5 py-1.5 no-underline"
+      href="https://bhuwanpandit.me/tags/database/"
+      >database</a
+    >
+    
+  </div>
+  
+</div>
+
+<!---->
+  </header>
+
+  <!---->
+  <figure class="mb-12 mt-0">
+    <img
+      class="h-auto w-full rounded-lg"
+      src="https://bhuwanpandit.me/cover/cover-image-db.webp"
+      alt="Database from Scratch in Rust"
+      width="520px"
+      height="345px"
+    />
+  </figure>
+  
+
+  <!-- TOC -->
+  <!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#overview"
+            >Overview</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#the-implementation-plan"
+            >The Implementation Plan</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#crawling-the-sqlite-docs"
+            >Crawling the SQLite Docs</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#coding-plan"
+            >Coding Plan</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#getting-started"
+            >Getting Started</a
+          >
+          
+          <ul>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#pre-requisites"
+                >Pre-requisites</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#project-initialization"
+                >Project Initialization</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#initial-files-and-folder-setup"
+                >Initial Files and Folder Setup</a
+              >
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#simple-repl"
+            >Simple REPL</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#lexer"
+            >Lexer</a
+          >
+          
+          <ul>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#tokens-and-token-types"
+                >Tokens and Token Types</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#recognizing-keywords-identifiers-and-literals"
+                >Recognizing Keywords, Identifiers, and Literals</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#why-is-lexical-analysis-important"
+                >Why is Lexical Analysis Important?</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/#coding-the-lexer"
+                >Coding the Lexer</a
+              >
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!---->
+
+  <!-- Content -->
+  <section><h2 id="overview">Overview</h2>
+<p>Databases, we hear about them everywhere. They're crucial for efficiently storing, retrieving, and managing data. I've used databases a lot throughout my journey as a developer, but every now and then, I’d find myself wondering, <code>how the hell does this thing actually work?</code></p>
+<p>To be honest, until now, I just had that curiosity but still moved on. But last night, I had one of those moments where I thought, <code>Hey, I know a bit of Rust (not an expert), so why not try building one?</code> This project will be a great excuse to dive deeper into Rust and, more importantly, to finally understand how databases work under the hood. Plus, let's be real, I can brag about it to my friends and maybe sneak it into my resume too 😉.</p>
+<h2 id="the-implementation-plan">The Implementation Plan</h2>
+<p>So here’s the deal: I have zero idea how databases work internally at the moment. I’ve browsed through some tutorials and blogs, and there’s a ton of great stuff out there. But this project isn’t about copying someone else's work—<code>it's about learning</code>. For this I will only refer to the <a href="https://www.sqlite.org/">SQLite docs</a> and the <a href="https://doc.rust-lang.org/std/index.html">Rust standard library docs</a>.</p>
+<p>Keep in mind, we are not trying to build a fully-fledged, production-ready database here. This will be a <code>toy database</code> for the sole purpose of <code>learning</code>. Below are the features I plan to implement:</p>
+<ul>
+<li>Create/Delete databases</li>
+<li>Create/Alter/Delete tables</li>
+<li>Select/Insert/Update/Delete data in the table</li>
+<li>Transaction support with Begin/Commit/Rollback</li>
+<li>Indexing and data persistence</li>
+<li>ACID compliance (Atomicity, Consistency, Isolation, Durability)</li>
+<li>Allowing access to the database over the network</li>
+<li>Maybe JOIN, WHERE (<code>not sure yet!</code>) </li>
+<li>And yes, we might refer to syntax from <code>mysql</code> as well</li>
+</ul>
+<p>Oh, and I just realized—I haven’t named the database yet. Let’s call it <code>bhu_db</code>. Simple, easy to remember, and it kind of has a nice ring to it. </p>
+<h2 id="crawling-the-sqlite-docs">Crawling the SQLite Docs</h2>
+<p>Alright, so before we get our hands dirty with code, We need to do some research. I decided that my primary source of reference will be the <a href="https://www.sqlite.org/">SQLite docs</a>. It’s a goldmine of information, and since SQLite is lightweight and easy to understand, it's perfect for our use case.</p>
+<p>After looking for the right part finnaly got the document that I wanted; &quot;<a href="https://www.sqlite.org/arch.html">Architecture of SQLite</a>&quot;. Below is the image that I just screenshotted from there and this gives us a clear components that we need to build, but I will cut corners probably, I am not sure yet.</p>
+<p><img src="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/sqlite-architecture.webp" alt="SQLite Architecture" /></p>
+<p>Ok, got what we need, we will start from top to bottom that is from Interface and then go downwards into the core components.</p>
+<h2 id="coding-plan">Coding Plan</h2>
+<p>The database will use a client-server architecture, but for time being we will use a simple <code>REPL (Read-Eval-Print Loop)</code> until we implement the networking protocol between the client and server. The image below describes the initial work plan, as well as the end goal as I continue building it.</p>
+<p><img src="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/initial-plan.webp" alt="Initial Work Plan" /></p>
+<p>In short, the REPL will serve as the interface between the user and the database(backend) for the time being. The user input will be tokenized, parsed, and processed, resulting in the final output.</p>
+<p><img src="https://bhuwanpandit.me/blogs/lets-write-database-from-scratch/final-plan.webp" alt="Final Work Plan" /></p>
+<p>As I keep building, the plan is to eventually allow users to connect to the database server using a client. The server will expose a TCP port and listen for user input through a simple protocol that I will implement. The rest of the architecture will remain the same as the initial plan, and finally, the user will receive the query results through network.</p>
+<p>Ok, let's fire up the code editor and setup the project.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Alright, before diving into the code, we need to set up a solid foundation. This will be our first step in building <code>bhu_db</code>. </p>
+<h3 id="pre-requisites">Pre-requisites</h3>
+<p>Make sure you have Rust installed. You can install Rust by following the instructions from the <a href="https://www.rust-lang.org/learn/get-started">official Rust website</a>.</p>
+<h3 id="project-initialization">Project Initialization</h3>
+<p>We'll use Cargo to initialize a <code>library</code> project (which does not contain a <code>main function</code> by default). This project will also include a couple of <code>binary</code> targets (each containing its own <code>main function</code>) within the same project.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> new bhu_db</span><span style="color:#bf616a;"> --lib
+</span><span style="color:#96b5b4;">cd</span><span> bhu_db
+</span><span style="color:#65737e;"># You should see the following structure:
+</span><span style="color:#bf616a;">tree
+</span><span style="color:#96b5b4;">.
+</span><span style="color:#bf616a;">├──</span><span> Cargo.toml
+</span><span style="color:#bf616a;">└──</span><span> src
+</span><span>    </span><span style="color:#bf616a;">└──</span><span> lib.rs
+</span></code></pre>
+<h3 id="initial-files-and-folder-setup">Initial Files and Folder Setup</h3>
+<p>The core components like the <code>Tokenizer</code>, <code>Parser</code>, and <code>other database-related</code> code will be in the library (<code>lib.rs</code>). The <code>server</code>, <code>client</code>, and <code>REPL</code> components will be implemented as separate binaries. In Rust, we can achieve this by creating a bin folder inside the src directory. Here’s how to set it up:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">mkdir -p</span><span> src/bin/repl &amp;&amp; </span><span style="color:#bf616a;">touch</span><span> src/bin/repl/main.rs
+</span><span style="color:#bf616a;">mkdir</span><span> src/bin/client &amp;&amp; </span><span style="color:#bf616a;">touch</span><span> src/bin/client/main.rs
+</span><span style="color:#bf616a;">mkdir</span><span> src/bin/server &amp;&amp; </span><span style="color:#bf616a;">touch</span><span> src/bin/server/main.rs
+</span><span>
+</span><span style="color:#65737e;"># The folder structure should look like this:
+</span><span style="color:#96b5b4;">.
+</span><span style="color:#bf616a;">├──</span><span> Cargo.toml
+</span><span style="color:#bf616a;">└──</span><span> src
+</span><span>    </span><span style="color:#bf616a;">├──</span><span> bin
+</span><span>    </span><span style="color:#bf616a;">│</span><span>   ├── client
+</span><span>    </span><span style="color:#bf616a;">│</span><span>   │   └── main.rs
+</span><span>    </span><span style="color:#bf616a;">│</span><span>   ├── repl
+</span><span>    </span><span style="color:#bf616a;">│</span><span>   │   └── main.rs
+</span><span>    </span><span style="color:#bf616a;">│</span><span>   └── server
+</span><span>    </span><span style="color:#bf616a;">│</span><span>       └── main.rs
+</span><span>    </span><span style="color:#bf616a;">└──</span><span> lib.rs
+</span></code></pre>
+<p>Now, with this setup, you can run each binary target using the command:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> run</span><span style="color:#bf616a;"> --bin </span><span>&lt;repl/client/server&gt;
+</span></code></pre>
+<p>Alright, this concludes our initial file and folder setup. Now, it’s time to start coding!</p>
+<h2 id="simple-repl">Simple REPL</h2>
+<p>A <code>REPL (Read-Eval-Print Loop)</code> is an interactive environment where user inputs are <code>read</code>, <code>evaluated</code>, and the results are <code>printed</code> back to the user. For our database, we need a simple loop that will run indefinitely, wait for user input, and take actions based on that input. For example, we'll exit the loop (break the loop) when the user types <code>exit</code>. Here’s how we can achieve that by editing the <code>src/bin/repl/main.rs</code> file:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>std::{io::{</span><span style="color:#bf616a;">self</span><span>, Write}, process};
+</span><span>
+</span><span style="color:#b48ead;">const </span><span style="color:#d08770;">WELCOME_MSG</span><span>: &amp;</span><span style="color:#b48ead;">str </span><span>= </span><span style="color:#b48ead;">r</span><span>#&quot;
+</span><span style="color:#a3be8c;">.______****__****__***__****__******_______**.______***
+</span><span style="color:#a3be8c;">|***_**\**|**|**|**|*|**|**|**|****|*******\*|***_**\**
+</span><span style="color:#a3be8c;">|**|_)**|*|**|__|**|*|**|**|**|****|**.--.**||**|_)**|*
+</span><span style="color:#a3be8c;">|***_**&lt;**|***__***|*|**|**|**|****|**|**|**||***_**&lt;**
+</span><span style="color:#a3be8c;">|**|_)**|*|**|**|**|*|**`--&#39;**|****|**&#39;--&#39;**||**|_)**|*
+</span><span style="color:#a3be8c;">|______/**|__|**|__|**\______/*****|_______/*|______/**
+</span><span style="color:#a3be8c;">*******************************************************
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">        Welcome to bhu_db!
+</span><span style="color:#a3be8c;">        Type &#39;exit&#39; to quit.
+</span><span>&quot;#;
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span>&quot;, </span><span style="color:#d08770;">WELCOME_MSG</span><span>);
+</span><span>    
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> stdout = io::stdout();
+</span><span>    </span><span style="color:#b48ead;">let</span><span> stdin = io::stdin();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
+</span><span>        print!(&quot;</span><span style="color:#a3be8c;">bhu_db&gt; </span><span>&quot;);
+</span><span>        stdout.</span><span style="color:#96b5b4;">flush</span><span>().</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">let mut</span><span> input = String::new();
+</span><span>        </span><span style="color:#b48ead;">let </span><span>_ = stdin.</span><span style="color:#96b5b4;">read_line</span><span>(&amp;</span><span style="color:#b48ead;">mut</span><span> input).</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>        </span><span style="color:#b48ead;">let</span><span> input = input.</span><span style="color:#96b5b4;">trim</span><span>();
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">match</span><span> input {
+</span><span>            &quot;</span><span style="color:#a3be8c;">exit</span><span>&quot; =&gt; {
+</span><span>                println!(&quot;</span><span style="color:#a3be8c;">Exiting bhu_db...</span><span>&quot;);
+</span><span>                process::exit(</span><span style="color:#d08770;">0</span><span>);
+</span><span>            },
+</span><span>            _ =&gt; {
+</span><span>                println!(&quot;</span><span style="color:#a3be8c;">Unrecognized command: &#39;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">&#39;</span><span>&quot;, input);
+</span><span>                </span><span style="color:#b48ead;">continue</span><span>;
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>In the code above:</p>
+<ol>
+<li>Handles to <code>stdout</code> and <code>stdin</code>:
+<ul>
+<li>We need a handle to <code>stdout</code> to print to the console and a handle to <code>stdin</code> to read user input. </li>
+</ul>
+</li>
+<li>REPL Loop:
+<ul>
+<li>We enter an <code>infinite loop</code> where we continuously prompt the user with <code>&quot;bhu_db&gt; &quot;</code>.</li>
+<li>The <code>stdout.flush()</code> ensures that our prompt is displayed immediately.</li>
+</ul>
+</li>
+<li>Reading User Input:
+<ul>
+<li>The line <code>stdin.read_line(&amp;mut input).unwrap();</code> reads a line from the user. </li>
+<li><code>read_line</code> is a blocking call, meaning it will wait until the user presses <code>Enter</code>.</li>
+</ul>
+</li>
+<li>Processing the Input:
+<ul>
+<li>We trim the input to remove any leading or trailing whitespace.</li>
+<li>If the user types <code>&quot;exit&quot;</code>, the program prints a message and exits using <code>process::exit(0)</code>.</li>
+<li>For any other input, we print a message saying the command is unrecognized (just for now) and continue the loop.</li>
+</ul>
+</li>
+</ol>
+<p>We can test the REPL by running:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> run</span><span style="color:#bf616a;"> --bin</span><span> repl
+</span><span>
+</span><span style="color:#65737e;"># The result should look like the below
+</span><span>
+</span><span style="color:#bf616a;">.______****__****__***__****__******_______**.______***
+</span><span>|</span><span style="color:#bf616a;">***_**</span><span style="color:#96b5b4;">\*</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">****</span><span>|</span><span style="color:#bf616a;">*******</span><span style="color:#96b5b4;">\*</span><span>|</span><span style="color:#bf616a;">***_**</span><span style="color:#96b5b4;">\*</span><span style="color:#bf616a;">*
+</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">_</span><span>)</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">__</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">****</span><span>|</span><span style="color:#bf616a;">**.--.**</span><span>||</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">_</span><span>)</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">*
+</span><span>|</span><span style="color:#bf616a;">***_**</span><span>&lt;**|</span><span style="color:#bf616a;">***__***</span><span>|</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">****</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>||</span><span style="color:#bf616a;">***_**</span><span>&lt;**
+</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">_</span><span>)</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">**</span><span>|</span><span style="color:#bf616a;">*</span><span>|</span><span style="color:#bf616a;">**</span><span>`</span><span style="color:#bf616a;">--</span><span>&#39;</span><span style="color:#a3be8c;">**|****|**</span><span>&#39;</span><span style="color:#bf616a;">--</span><span>&#39;</span><span style="color:#a3be8c;">**||**|_)**|*
+</span><span style="color:#a3be8c;">|______/**|__|**|__|**\______/*****|_______/*|______/**
+</span><span style="color:#a3be8c;">*******************************************************
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">        Welcome to bhu_db!
+</span><span style="color:#a3be8c;">        Type </span><span>&#39;</span><span style="color:#bf616a;">exit</span><span>&#39;</span><span style="color:#a3be8c;"> to quit.
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">bhu_db&gt; create database test;
+</span><span style="color:#a3be8c;">Unrecognized command: </span><span>&#39;</span><span style="color:#bf616a;">create</span><span> database test;&#39;
+</span><span style="color:#a3be8c;">bhu_db&gt; exit
+</span><span style="color:#a3be8c;">Exiting bhu_db...
+</span></code></pre>
+<p>This REPL will form the basis of our interaction with <code>bhu_db</code> for now, but as we continue, we'll extend it to handle more complex commands and eventually switch to a client-server model.</p>
+<h2 id="lexer">Lexer</h2>
+<p>The process of breaking down input text into smaller, meaningful pieces is called <code>Lexical Analysis</code>, but you might also hear it referred to as <code>Tokenization</code> or <code>Scanning</code>. Regardless of the name, the idea is the same: we take the user's input, examine it character by character, and group those characters into meaningful units called tokens. These tokens are essential for the next stages of processing.</p>
+<pre data-lang="sql" style="background-color:#2b303b;color:#c0c5ce;" class="language-sql "><code class="language-sql" data-lang="sql"><span style="color:#b48ead;">SELECT</span><span> column1, column2 </span><span style="color:#b48ead;">FROM</span><span> some_table;
+</span></code></pre>
+<p>Here, how we interpret it:</p>
+<ul>
+<li><code>SELECT</code> is a keyword with a predefined meaning, it tells the database to retrieve data.</li>
+<li><code>FROM</code> is another keyword, specifying the source of the data.</li>
+<li><code>column1</code>, <code>column2</code>, and <code>some_table</code> are identifiers, they don’t have predefined meanings, but they provide context to the keywords (e.g., what to select and from where).</li>
+<li><code>;</code> is a <code>symbol</code>, specifying the end of query.</li>
+<li>Any numbers, strings, or boolean values within queries (e.g., <code>123</code>, <code>'text'</code>, <code>TRUE</code>) are referred to as literals.</li>
+</ul>
+<p>The job of the lexer is to scan through the input one character at a time, grouping them into <code>lexemes</code> aka the smallest sequences of characters that represent something meaningful. For our query, the lexemes are:</p>
+<blockquote>
+<p><code>SELECT</code>, <code>column1</code>, <code>cloumn2</code>, <code>FROM</code>, <code>some_table</code> and <code>;</code></p>
+</blockquote>
+<h3 id="tokens-and-token-types">Tokens and Token Types</h3>
+<p>The lexer takes the raw input and groups characters into lexemes, which are the smallest meaningful sequences of characters. It then assigns a token type to each lexeme. While lexemes are just raw fragments of the input text, a <code>token</code> combines a lexeme with additional information, such as its type or position in the source. For example, in the query above:</p>
+<ul>
+<li>Lexeme: <code>SELECT</code>  → Token: <code>Keyword(SELECT)</code></li>
+<li>Lexeme: <code>column1</code> → Token: <code>Identifier(column1)</code></li>
+<li>Lexeme: <code>;</code>       → Token: <code>Symbol(Semicolon)</code></li>
+</ul>
+<p>Each token has:</p>
+<ul>
+<li><em>Lexeme</em>: The actual text from the input.</li>
+<li><em>Token Type</em>: What kind of token it is (e.g., keyword, identifier, literal, or symbol).</li>
+<li><em>Metadata</em>: Additional information, such as the token’s position in the input.</li>
+</ul>
+<p>This transformation from characters to tokens is a critical first step in building a database or any system that processes user inputs.</p>
+<h3 id="recognizing-keywords-identifiers-and-literals">Recognizing Keywords, Identifiers, and Literals</h3>
+<ul>
+<li><em>Keywords</em>: The lexer recognizes predefined keywords like <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, etc., which have special meanings.</li>
+<li><em>Identifiers</em>: Any user-defined names (e.g., column or table names) that don’t match a keyword fall into this category.</li>
+<li><em>Literals</em>: These include numbers, strings, and boolean values. For example:
+<ul>
+<li><code>123</code>     → <code>Literal(Number, 123)</code></li>
+<li><code>'hello'</code> → <code>Literal(String, 'hello')</code></li>
+<li><code>TRUE</code>    → <code>Literal(Boolean, TRUE)</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="why-is-lexical-analysis-important">Why is Lexical Analysis Important?</h3>
+<p>The lexer does more than just grouping characters. It filters out irrelevant details like whitespace and comments, normalizes tokens for easier parsing, and helps identify syntax errors early. For example; a misspelled keyword like <code>SELEC</code> would be flagged as an <code>unrecognized lexeme</code>.</p>
+<p>By the end of this process, the input query is transformed into a structured list of tokens, ready for further processing by the parser.</p>
+<h3 id="coding-the-lexer">Coding the Lexer</h3>
+<p>Now that we’ve covered the basics of a lexer, it’s time to start implementing it. We’ll follow a step-by-step approach to ensure everything is well-structured and easy to understand.</p>
+<h4 id="setting-up-the-project-files-and-folders">Setting Up the Project Files and Folders</h4>
+<p>Let’s first organize our project folder. Update your src/lib.rs file to declare the lexer module:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/lib.rs
+</span><span style="color:#b48ead;">mod </span><span>lexer
+</span></code></pre>
+<p>Next, create the necessary folders and files for the lexer module:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">mkdir</span><span> src/lexer &amp;&amp; </span><span style="color:#bf616a;">touch</span><span> src/lexer/mod.rs src/lexer/token_type.rs src/lexer/token.rs src/lexer/lexer.rs 
+</span></code></pre>
+<p>Here’s what each file will contain:
+- <code>src/lexer/mod.rs</code> : Handles module declarations for the lexer.
+- <code>src/lexer/token_type.rs</code>: Defines all token types (e.g., keywords, symbols, literals).
+- <code>src/lexer/token.rs</code>: Defines the structure for a token, including metadata like line and column number.
+- <code>src/lexer/lexer.rs</code>: The main logic of the lexer, responsible for converting input into tokens.</p>
+<p>Add the following to <code>src/lexer/mod.rs</code> to declare all submodules:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub mod </span><span>token_type;
+</span><span style="color:#b48ead;">pub mod </span><span>token;
+</span><span style="color:#b48ead;">pub mod </span><span>lexer;
+</span></code></pre>
+<h4 id="defining-token-types">Defining Token Types</h4>
+<p>Tokens represent the smallest meaningful units in a query, and each token has a type (e.g., keyword, symbol, literal). Let’s define these types in <code>src/lexer/token_type.rs</code>.</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/lexer/token_type.rs
+</span><span style="color:#b48ead;">use </span><span>std::fmt;
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Debug)]
+</span><span style="color:#b48ead;">pub enum </span><span>TokenType {
+</span><span>    </span><span style="color:#65737e;">// Keywords
+</span><span>    </span><span style="color:#d08770;">DATABASE</span><span>, </span><span style="color:#d08770;">DATABASES</span><span>, </span><span style="color:#d08770;">TABLE</span><span>, </span><span style="color:#d08770;">TABLES</span><span>, </span><span style="color:#d08770;">SHOW</span><span>, </span><span style="color:#d08770;">DESCRIBE</span><span>, </span><span style="color:#d08770;">DROP</span><span>,
+</span><span>    </span><span style="color:#d08770;">CREATE</span><span>, </span><span style="color:#d08770;">UPDATE</span><span>, </span><span style="color:#d08770;">INSERT</span><span>, </span><span style="color:#d08770;">SELECT</span><span>, </span><span style="color:#d08770;">DELETE</span><span>, </span><span style="color:#d08770;">ALTER</span><span>, </span><span style="color:#d08770;">INTO</span><span>, </span><span style="color:#d08770;">VALUES</span><span>, </span><span style="color:#d08770;">SET</span><span>, </span><span style="color:#d08770;">ADD</span><span>,
+</span><span>    </span><span style="color:#d08770;">FROM</span><span>, </span><span style="color:#d08770;">WHERE</span><span>, </span><span style="color:#d08770;">AND</span><span>, </span><span style="color:#d08770;">OR</span><span>, </span><span style="color:#d08770;">IS</span><span>, </span><span style="color:#d08770;">NOT</span><span>, </span><span style="color:#d08770;">NULL</span><span>, </span><span style="color:#d08770;">ORDER</span><span>, </span><span style="color:#d08770;">BY</span><span>, </span><span style="color:#d08770;">ASC</span><span>, </span><span style="color:#d08770;">DESC</span><span>,
+</span><span>    </span><span style="color:#d08770;">LIMIT</span><span>, </span><span style="color:#d08770;">AS</span><span>, </span><span style="color:#d08770;">LIKE</span><span>, </span><span style="color:#d08770;">IN</span><span>, </span><span style="color:#d08770;">BETWEEN</span><span>, </span><span style="color:#d08770;">JOIN</span><span>, </span><span style="color:#d08770;">INNER</span><span>, </span><span style="color:#d08770;">LEFT</span><span>, </span><span style="color:#d08770;">RIGHT</span><span>, </span><span style="color:#d08770;">CROSS</span><span>, </span><span style="color:#d08770;">ON</span><span>,
+</span><span>    </span><span style="color:#d08770;">UNION</span><span>, </span><span style="color:#d08770;">ANY</span><span>, </span><span style="color:#d08770;">ALL</span><span>, </span><span style="color:#d08770;">GROUP</span><span>, </span><span style="color:#d08770;">HAVING</span><span>, </span><span style="color:#d08770;">EXISTS</span><span>, </span><span style="color:#d08770;">MODIFY</span><span>,
+</span><span>    </span><span style="color:#d08770;">CASE</span><span>, </span><span style="color:#d08770;">WHEN</span><span>, </span><span style="color:#d08770;">THEN</span><span>, </span><span style="color:#d08770;">ELSE</span><span>, </span><span style="color:#d08770;">END</span><span>, </span><span style="color:#d08770;">SOME</span><span>, </span><span style="color:#d08770;">VIEW</span><span>,
+</span><span>
+</span><span>    </span><span style="color:#65737e;">//Functions
+</span><span>    </span><span style="color:#d08770;">MIN</span><span>, </span><span style="color:#d08770;">MAX</span><span>, </span><span style="color:#d08770;">COUNT</span><span>, </span><span style="color:#d08770;">AVG</span><span>, </span><span style="color:#d08770;">SUM</span><span>, </span><span style="color:#d08770;">IFNULL</span><span>, </span><span style="color:#d08770;">COALESCE</span><span>,
+</span><span>
+</span><span>    </span><span style="color:#65737e;">//Constraints
+</span><span>    </span><span style="color:#d08770;">CONSTRAINT</span><span>, </span><span style="color:#d08770;">UNIQUE</span><span>, </span><span style="color:#d08770;">PRIMARY</span><span>, </span><span style="color:#d08770;">FOREIGN</span><span>, </span><span style="color:#d08770;">KEY</span><span>, </span><span style="color:#d08770;">CHECK</span><span>, </span><span style="color:#d08770;">DEFAULT</span><span>, </span><span style="color:#d08770;">INDEX</span><span>, 
+</span><span>    </span><span style="color:#d08770;">REFERENCES</span><span>, </span><span style="color:#d08770;">AUTO_INCREMENT</span><span>, 
+</span><span>
+</span><span>    </span><span style="color:#65737e;">//Symbols and Operators
+</span><span>    </span><span style="color:#d08770;">UNDERSCORE</span><span>, </span><span style="color:#d08770;">COMMA</span><span>, </span><span style="color:#d08770;">SEMICOLON</span><span>, </span><span style="color:#d08770;">LEFTPAREN</span><span>, </span><span style="color:#d08770;">RIGHTPAREN</span><span>,
+</span><span>    </span><span style="color:#d08770;">PLUS</span><span>, </span><span style="color:#d08770;">MINUS</span><span>, </span><span style="color:#d08770;">DIVIDE</span><span>, </span><span style="color:#d08770;">PERCENT</span><span>, </span><span style="color:#d08770;">ASTERISK</span><span>, </span><span style="color:#d08770;">BWAND</span><span>, </span><span style="color:#d08770;">BWOR</span><span>, </span><span style="color:#d08770;">BWXOR</span><span>,
+</span><span>    </span><span style="color:#d08770;">EQUAL</span><span>, </span><span style="color:#d08770;">GREATERTHAN</span><span>, </span><span style="color:#d08770;">LESSTHAN</span><span>, </span><span style="color:#d08770;">GREATEREQUAL</span><span>, </span><span style="color:#d08770;">LESSEQUAL</span><span>, </span><span style="color:#d08770;">NOTEQUAL</span><span>,
+</span><span>    </span><span style="color:#d08770;">PLUSEQUAL</span><span>, </span><span style="color:#d08770;">MINUSEQUAL</span><span>, </span><span style="color:#d08770;">ASTERISKEQUAL</span><span>, </span><span style="color:#d08770;">DIVIDEEQUAL</span><span>, </span><span style="color:#d08770;">PERCENTEQUAL</span><span>, </span><span style="color:#d08770;">BWANDEQUAL</span><span>, </span><span style="color:#d08770;">BWEXCEQUAL</span><span>, </span><span style="color:#d08770;">BWOREQUAL</span><span>,
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Misc
+</span><span>    </span><span style="color:#d08770;">VARCHAR</span><span>, </span><span style="color:#d08770;">INT</span><span>, </span><span style="color:#d08770;">FLOAT</span><span>, </span><span style="color:#d08770;">DATE</span><span>, </span><span style="color:#d08770;">IDENTIFIER</span><span>,
+</span><span>    </span><span style="color:#d08770;">EOF</span><span>,
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Debug)]
+</span><span style="color:#b48ead;">pub enum </span><span>Literal {
+</span><span>    StringLiteral(String),
+</span><span>    NumberLiteral(</span><span style="color:#b48ead;">isize</span><span>),
+</span><span>    FloatLiteral(</span><span style="color:#b48ead;">f64</span><span>),
+</span><span>    BooleanLiteral(</span><span style="color:#b48ead;">bool</span><span>),
+</span><span>    NullLiteral,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>fmt::Display </span><span style="color:#b48ead;">for </span><span>Literal {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fmt</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">f</span><span>: &amp;</span><span style="color:#b48ead;">mut </span><span>fmt::Formatter&lt;&#39;_&gt;) -&gt; fmt::Result {
+</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#bf616a;">self </span><span>{
+</span><span>            Literal::StringLiteral(s) =&gt; write!(f, &quot;</span><span style="color:#d08770;">{}</span><span>&quot;, s),
+</span><span>            Literal::NumberLiteral(n) =&gt; write!(f, &quot;</span><span style="color:#d08770;">{}</span><span>&quot;, n),
+</span><span>            Literal::FloatLiteral(fl) =&gt; write!(f, &quot;</span><span style="color:#d08770;">{}</span><span>&quot;, fl),
+</span><span>            Literal::BooleanLiteral(b) =&gt; write!(f, &quot;</span><span style="color:#d08770;">{}</span><span>&quot;, b),
+</span><span>            Literal::NullLiteral=&gt; write!(f, &quot;</span><span style="color:#a3be8c;">Null</span><span>&quot;),
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>Here, we just copied all the different token type that are available, which is here just for an example, so that we can get the gist of how things are done. We also implemented <code>Display</code> trait so that we can print the Literal value and would be useful for debugging purpose.</p>
+<h4 id="defining-token-structure">Defining Token Structure</h4>
+<p>With the token types defined, we can now create a structure to represent a single token. Each token will include its <code>type</code>, <code>lexeme</code>, and <code>metadata</code> (like the position in the input).</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/lexer/token.rs
+</span><span style="color:#b48ead;">use super</span><span>::token_type::{Literal, TokenType};
+</span><span style="color:#b48ead;">use </span><span>std::fmt;
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Debug)]
+</span><span style="color:#b48ead;">pub struct </span><span>Token {
+</span><span>    </span><span style="color:#bf616a;">token_type</span><span>: TokenType,
+</span><span>    </span><span style="color:#bf616a;">lexeme</span><span>: String,
+</span><span>    </span><span style="color:#bf616a;">literal</span><span>: Option&lt;Literal&gt;,
+</span><span>    </span><span style="color:#bf616a;">line</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>    </span><span style="color:#bf616a;">column</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Token {
+</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">new</span><span>(
+</span><span>        </span><span style="color:#bf616a;">token_type</span><span>: TokenType,
+</span><span>        </span><span style="color:#bf616a;">lexeme</span><span>: String,
+</span><span>        </span><span style="color:#bf616a;">literal</span><span>: Option&lt;Literal&gt;,
+</span><span>        </span><span style="color:#bf616a;">line</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>        </span><span style="color:#bf616a;">column</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>    ) -&gt; </span><span style="color:#b48ead;">Self </span><span>{
+</span><span>        Token {
+</span><span>            token_type,
+</span><span>            lexeme,
+</span><span>            literal,
+</span><span>            line,
+</span><span>            column,
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>fmt::Display </span><span style="color:#b48ead;">for </span><span>Token {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fmt</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">f</span><span>: &amp;</span><span style="color:#b48ead;">mut </span><span>fmt::Formatter&lt;&#39;_&gt;) -&gt; fmt::Result {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> literal_display = </span><span style="color:#b48ead;">match </span><span>&amp;</span><span style="color:#bf616a;">self</span><span>.literal {
+</span><span>            Some(lit) =&gt; format!(&quot;</span><span style="color:#d08770;">{}</span><span>&quot;, lit),
+</span><span>            None =&gt; &quot;</span><span style="color:#a3be8c;">None</span><span>&quot;.</span><span style="color:#96b5b4;">to_string</span><span>(),
+</span><span>        };
+</span><span>
+</span><span>        write!(
+</span><span>            f,
+</span><span>            &quot;</span><span style="color:#a3be8c;">Token </span><span style="color:#96b5b4;">{{ 
+</span><span style="color:#a3be8c;">                type: </span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">, 
+</span><span style="color:#a3be8c;">                lexeme: &#39;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">&#39;, 
+</span><span style="color:#a3be8c;">                literal: </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">, 
+</span><span style="color:#a3be8c;">                line: </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">, 
+</span><span style="color:#a3be8c;">                column: </span><span style="color:#d08770;">{} 
+</span><span style="color:#a3be8c;">            </span><span style="color:#96b5b4;">}}</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">self</span><span>.token_type, </span><span style="color:#bf616a;">self</span><span>.lexeme, literal_display, </span><span style="color:#bf616a;">self</span><span>.line, </span><span style="color:#bf616a;">self</span><span>.column
+</span><span>        )
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>Here's what each field means:
+- <code>token_type</code>: The type of the token (e.g., keyword (TokenType::TABLE ...), symbol (TokenType::COMMA ...), literal (TokenType::VARCHAR ...)).
+- <code>lexeme</code>: The actual text that is parsed from the user input which forms this token.
+- <code>iteral</code>: Optional literal value for tokens that represent values (e.g., numbers or strings).
+- <code>line</code> and <code>column</code>: Metadata to track the token’s position in the input for error reporting.</p>
+<p>With the foundational components of the lexer in place, the next step is to implement the actual logic for reading input and generating tokens</p>
+<h4 id="the-lexer">The Lexer</h4>
+<p>The lexer is the first major component of our database. It processes the raw input string, breaking it down into manageable pieces called tokens. These tokens represent meaningful units like keywords, identifiers, symbols, or literals. Let us start by defining the structure for the lexer and implement a associated method to create the instance of Lexer:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use super</span><span>::token::Token;
+</span><span style="color:#b48ead;">use </span><span>std::{iter::Peekable, </span><span style="color:#b48ead;">str</span><span>::Chars};
+</span><span>
+</span><span style="color:#b48ead;">pub struct </span><span>Lexer&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt; {
+</span><span>    </span><span style="color:#bf616a;">source</span><span>: Peekable&lt;Chars&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt;&gt;,
+</span><span>    </span><span style="color:#bf616a;">tokens</span><span>: Vec&lt;Token&gt;,
+</span><span>    </span><span style="color:#bf616a;">current</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>    </span><span style="color:#bf616a;">line</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>    </span><span style="color:#bf616a;">start</span><span>: </span><span style="color:#b48ead;">usize</span><span>,
+</span><span>    </span><span style="color:#bf616a;">errors</span><span>: Vec&lt;String&gt;,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl</span><span>&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt; Lexer&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt;  {
+</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">new</span><span>(</span><span style="color:#bf616a;">source</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>) -&gt; </span><span style="color:#b48ead;">Self </span><span>{
+</span><span>        Lexer {
+</span><span>            source: source.</span><span style="color:#96b5b4;">chars</span><span>().</span><span style="color:#96b5b4;">peekable</span><span>(),
+</span><span>            tokens: Vec::new(),
+</span><span>            current: </span><span style="color:#d08770;">0</span><span>,
+</span><span>            line: </span><span style="color:#d08770;">1</span><span>,
+</span><span>            start: </span><span style="color:#d08770;">0</span><span>,
+</span><span>            errors: Vec::new(),
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>Here's what each field means:
+- <code>source</code>: Peekable iterator of characters, so that the lexer can inspect upcoming characters to decide how to group them into tokens, making it both efficient and flexible.
+- <code>tokens</code>: Container to store tokens that will be generated as we tokenize the input.
+- <code>current</code>: Track the current position of the lexer.
+- <code>line</code>: Metadata to track the lexer's position in the input for error reporting.
+- <code>start</code>: Track the start position of current token, where current will be at end, and then we can extract the actual characters from input.
+- <code>errors</code>: List of errors so we can inform the user of multiple error at once.</p>
+<h4 id="gut-of-lexer">Gut of Lexer</h4>
+<p>Now that we have foundation for our lexer, </p>
+</section>
+
+  <hr />
+
+  <!-- Post Nav -->
+  
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  <!---->
+  
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;bhuwanpandit.me&#x2F;blogs&#x2F;implementing-binary-tree&#x2F;"
+    ><span>Implementing Binary Tree</span><span class="ml-1.5">→</span></a
+  >
+  
+</nav>
+
+<!---->
+
+  <!-- Comment -->
+  <!---->
+  
+<div class="giscus mt-12"></div>
+<script
+  src="https://giscus.app/client.js"
+  data-repo="bp7968h&#x2F;bp7968h.github.io"
+  data-repo-id="R_kgDOLTnpRw"
+  data-category="Post Comments"
+  data-category-id="DIC_kwDOLTnpR84CjwXr"
+  data-mapping="pathname"
+  data-strict="1"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="top"
+  data-theme="dark"
+  data-lang="en"
+  data-loading="lazy"
+  crossorigin="anonymous"
+  defer
+></script>
+<!---->
+<!---->
+  
+
+  <!-- Page End inject -->
+  
+</article>
+
+  </main>
+  <div class="fixed bottom-4 right-4 flex w-80 flex-col space-y-4 rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800 z-50"
+    id="cookie-notice">
+    <span class="text-2xl font-semibold text-black dark:text-white">🍪 Cookie Notice</span>
+    <p class="text-black dark:text-white">
+        We use cookies to ensure that we give you the best experience on our website.
+    </p>
+    <div class="mt-4 flex justify-center">
+        <button id="decline-cookie-button"
+            class="text-red-600 hover:text-white hover:bg-red-600 py-2 px-4 rounded-lg font-bold transition-all duration-300">
+            Decline
+        </button>
+        <button id="accept-cookie-button"
+            class="text-green-600 hover:text-white hover:bg-green-600 py-2 px-4 rounded-lg font-bold transition-all duration-300">
+            Accept
+        </button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cookieNotice = document.getElementById('cookie-notice');
+        const acceptButton = document.getElementById('accept-cookie-button');
+        const declineButton = document.getElementById('decline-cookie-button');
+        const gtmNoscript = document.querySelector('noscript');
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cookieName) === 0) {
+                    return c.substring(cookieName.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function loadGTM() {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-P2J68HFX';
+            document.head.appendChild(script);
+
+            if (gtmNoscript) {
+                gtmNoscript.style.display = 'block';
+                gtmNoscript.style.visibility = 'visible';
+            }
+        }
+
+        const cookieConsentGiven = getCookie('cookie_consent');
+
+        if (cookieConsentGiven === 'true') {
+            loadGTM();
+            if (cookieNotice) {
+                cookieNotice.style.display = 'none';
+            }
+        } else {
+            if (cookieNotice) {
+                cookieNotice.style.display = 'block'; // Or your preferred display style
+            }
+        }
+
+        if (acceptButton && cookieNotice) {
+            acceptButton.addEventListener('click', function () {
+                setCookie('cookie_consent', 'true', 365);
+                loadGTM();
+                cookieNotice.style.display = 'none';
+            });
+        }
+
+        if (declineButton && cookieNotice) {
+            declineButton.addEventListener('click', function () {
+                setCookie('cookie_consent', 'false', 30);
+                cookieNotice.style.display = 'none';
+            });
+        }
+    });
+</script>
+  <footer id="footer" class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mx-auto text-center basis-full lg:basis-1/2">
+    <!---->
+    <!---->
+    &copy; 2024 - 2025<!---->
+    
+    <a class="link" href="https://bhuwanpandit.me">
+      Bhuwan Pandit
+    </a>
+     |<!---->
+    <!---->
+    <a class="link" href="https:&#x2F;&#x2F;bhuwanpandit.me" rel="noopener" target="_blank">
+      bp7968h
+    </a>
+    <!---->
+    
+  </div>
+  <!-- Footer inject -->
+  
+</footer>
+
+
+  <!-- Body End inject -->
+  
+</body>
+
+</html>
